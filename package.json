@@ -20,6 +20,7 @@
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.36.0",
 		"globals": "^15.0.0",
+		"prepend-file": "^2.0.1",
 		"prettier": "^3.1.1",
 		"prettier-plugin-svelte": "^3.1.2",
 		"svelte": "^4.2.7",
@@ -29,5 +30,10 @@
 		"typescript-eslint": "^8.0.0-alpha.20",
 		"vite": "^5.0.3"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"@sveltejs/adapter-node": "^5.2.0",
+		"@vercel/nft": "^0.27.3",
+		"dotenv": "^16.4.5"
+	}
 }
