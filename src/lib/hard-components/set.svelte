@@ -1,5 +1,6 @@
 <script lang="ts">
 	import * as Accordion from '$lib/components/ui/accordion/index.js';
+	import { Button } from '$lib/components/ui/button/index.js';
 
 	type Set = {
 		setType: string;
@@ -18,13 +19,17 @@
 	<Accordion.Item value="item-1">
 		<Accordion.Trigger>{set.weight} {set.weightUnit}: {set.reps} reps</Accordion.Trigger>
 		<Accordion.Content>
-			<div class="flex flex-col gap-4">
-				{#each set.tags as tag}
-					<div class="flex gap-2 items-center">
-						<div class="w-4 h-4 rounded-full bg-gray-200"></div>
-						<span>{tag}</span>
-					</div>
-				{/each}
+			<div>
+				<Button class="float-right top-4 right-4" variant="ghost">Edit</Button>
+				<!-- TODO: Add Edit button -->
+				<div class="flex flex-col gap-4">
+					{#each set.tags as tag}
+						<div class="flex gap-2 items-center">
+							<div class="w-4 h-4 rounded-full bg-gray-200"></div>
+							<span>{tag}</span>
+						</div>
+					{/each}
+				</div>
 			</div>
 
 			<br />

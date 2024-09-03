@@ -1,5 +1,6 @@
 <script lang="ts">
 	import SetComponent from '$lib/hard-components/set.svelte';
+	import NewItem from '$lib/hard-components/new-item.svelte';
 </script>
 
 <img src="/hard-logo.png" alt="Hard Logo" class="h-64 w-64 mx-auto rounded-xl mt-16" />
@@ -17,3 +18,5 @@
 			'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor.'
 	}}
 />
+
+<NewItem>form here</NewItem>
