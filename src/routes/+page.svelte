@@ -1,22 +1,80 @@
 <script lang="ts">
-	import SetComponent from '$lib/hard-components/set.svelte';
-	import NewItem from '$lib/hard-components/new-item.svelte';
+	import ExerciseComponent from '$lib/hard-components/exercise.svelte';
+
+	const exercises = [
+		{
+			name: 'Squat',
+			description: 'This is a description',
+			tags: ['Squat', 'Bench Press'],
+			sets: [
+				{
+					setType: 'warmup',
+					weight: 5,
+					weightUnit: 'kg',
+					reps: 5,
+					tags: ['Squat', 'Bench Press'],
+					notes: 'This is a note',
+					comparison: 'This is a comparison'
+				},
+				{
+					setType: 'working',
+					weight: 5,
+					weightUnit: 'kg',
+					reps: 5,
+					tags: ['Squat', 'Bench Press'],
+					notes: 'This is a note',
+					comparison: 'This is a comparison'
+				},
+				{
+					setType: 'working',
+					weight: 5,
+					weightUnit: 'kg',
+					reps: 5,
+					tags: ['Squat', 'Bench Press'],
+					notes: 'This is a note',
+					comparison: 'This is a comparison'
+				}
+			]
+		},
+		{
+			name: 'Bench Press',
+			description: 'This is a description',
+			tags: ['Bench Press', 'Squat'],
+			sets: [
+				{
+					setType: 'warmup',
+					weight: 5,
+					weightUnit: 'kg',
+					reps: 5,
+					tags: ['Bench Press', 'Squat'],
+					notes: 'This is a note',
+					comparison: 'This is a comparison'
+				},
+				{
+					setType: 'working',
+					weight: 5,
+					weightUnit: 'kg',
+					reps: 5,
+					tags: ['Bench Press', 'Squat'],
+					notes: 'This is a note',
+					comparison: 'This is a comparison'
+				},
+				{
+					setType: 'working',
+					weight: 5,
+					weightUnit: 'kg',
+					reps: 5,
+					tags: ['Bench Press', 'Squat'],
+					notes: 'This is a note',
+					comparison: 'This is a comparison'
+				}
+			]
+		}
+	];
 </script>
 
 <img src="/hard-logo.png" alt="Hard Logo" class="h-64 w-64 mx-auto rounded-xl mt-16" />
 
-<SetComponent
-	set={{
-		setType: 'warmup',
-		weight: 150,
-		weightUnit: 'lbs',
-		reps: 5,
-		tags: ['Squat', 'Legs'],
-		notes:
-			'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor.',
-		comparison:
-			'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor.'
-	}}
-/>
-
-<NewItem>form here</NewItem>
+{#each exercises as exercise}
+	<ExerciseComponent {exercise} />
+{/each}
