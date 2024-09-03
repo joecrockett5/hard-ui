@@ -1,16 +1,7 @@
 <script lang="ts">
 	import * as Accordion from '$lib/components/ui/accordion/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
-
-	type Set = {
-		setType: string;
-		weight: number;
-		weightUnit: string;
-		reps: number;
-		tags: string[];
-		notes: string;
-		comparison: string;
-	};
+	import type { Set } from '$lib/types';
 
 	export let set: Set;
 </script>
@@ -23,12 +14,14 @@
 				<Button class="float-right top-4 right-4" variant="ghost">Edit</Button>
 				<!-- TODO: Add Edit button -->
 				<div class="flex flex-col gap-4">
-					{#each set.tags as tag}
-						<div class="flex gap-2 items-center">
-							<div class="w-4 h-4 rounded-full bg-gray-200"></div>
-							<span>{tag}</span>
-						</div>
-					{/each}
+					{#if set.tags}
+						{#each set.tags as tag}
+							<div class="flex gap-2 items-center">
+								<div class="w-4 h-4 rounded-full bg-gray-200"></div>
+								<span>{tag.name}</span>
+							</div>
+						{/each}
+					{/if}
 				</div>
 			</div>
 

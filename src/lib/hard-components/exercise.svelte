@@ -1,44 +1,46 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
+	import { Button } from '$lib/components/ui/button/index.js';
 	import SetComponent from '$lib/hard-components/set.svelte';
 	import NewItem from '$lib/hard-components/new-item.svelte';
-
-	type Exercise = {
-		name: string;
-		description: string;
-		tags: string[];
-		sets: any[];
-	};
+	import type { Exercise, Set } from '$lib/types';
 
 	export let exercise: Exercise;
 
-	const warmupSets: any[] = [];
-	const workingSets: any[] = [];
+	const warmupSets: Set[] = [];
+	const workingSets: Set[] = [];
 
-	exercise.sets.forEach((set) => {
-		if (set.setType === 'warmup') {
-			warmupSets.push(set);
-		} else {
-			workingSets.push(set);
-		}
-	});
+	if (exercise.sets) {
+		exercise.sets.forEach((set) => {
+			if (set.setType === 'warmup') {
+				warmupSets.push(set);
+			} else {
+				workingSets.push(set);
+			}
+		});
+	}
 </script>
 
 <Card.Root class="mb-4">
-	<Card.Header>
-		<Card.Title>{exercise.name}</Card.Title>
+	<Card.Header class="w-1/2">
+		<Card.Title>
+			{exercise.name}
+		</Card.Title>
 		{#if exercise.description}
 			<Card.Description>{exercise.description}</Card.Description>
 		{/if}
 	</Card.Header>
+	<!-- TODO: Add Edit button -->
 	<Card.Content>
 		<div>
-			{#each exercise.tags as tag}
-				<div class="flex gap-2 items-center">
-					<div class="w-4 h-4 rounded-full bg-gray-200"></div>
-					<span>{tag}</span>
-				</div>
-			{/each}
+			{#if exercise.tags}
+				{#each exercise.tags as tag}
+					<div class="flex gap-2 items-center">
+						<div class="w-4 h-4 rounded-full bg-gray-200"></div>
+						<span>{tag.name}</span>
+					</div>
+				{/each}
+			{/if}
 		</div>
 		<div class="mt-4">
 			<h3 class="text-xl font-bold">Warmup Sets</h3>
