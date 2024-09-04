@@ -7,7 +7,7 @@
 </script>
 
 <Dialog.Root>
-	<Dialog.Trigger class={buttonVariants({ variant: 'outline' }) + ' w-full text-gray-400'}>
+	<Dialog.Trigger class={buttonVariants({ variant: 'outline' }) + ' w-full text-gray-400 mt-1'}>
 		<Plus />
 		New {item}
 	</Dialog.Trigger>

@@ -21,7 +21,7 @@
 	}
 </script>
 
-<Card.Root class="mb-4">
+<Card.Root class="mt-4">
 	<Card.Header class="w-1/2">
 		<Card.Title>
 			{exercise.name}
@@ -36,13 +36,13 @@
 			{#if exercise.tags}
 				{#each exercise.tags as tag}
 					<div class="flex gap-2 items-center">
-						<div class="w-4 h-4 rounded-full bg-gray-200"></div>
+						<span class="rounded-full w-4 h-4 bg-gray-200" style="background-color: {tag.color}" />
 						<span>{tag.name}</span>
 					</div>
 				{/each}
 			{/if}
 		</div>
-		<div class="mt-4">
+		<div class="mt-6">
 			<h3 class="text-xl font-bold">Warmup Sets</h3>
 			{#each warmupSets as set}
 				<SetComponent {set} />
@@ -51,7 +51,7 @@
 				<!-- TODO: Add NewItem form -->
 			</NewItem>
 		</div>
-		<div class="mt-4">
+		<div class="mt-6">
 			<h3 class="text-xl font-bold">Working Sets</h3>
 			{#each workingSets as set}
 				<SetComponent {set} />

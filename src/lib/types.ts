@@ -19,3 +19,10 @@ export type Exercise = {
 	tags?: Tag[];
 	sets?: Set[];
 };
+
+export type WorkoutInfo = {
+	date: string;
+	workoutTitle: string;
+	tags?: Tag[];
+	notes?: string;
+};

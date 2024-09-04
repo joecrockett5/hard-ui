@@ -17,7 +17,10 @@
 					{#if set.tags}
 						{#each set.tags as tag}
 							<div class="flex gap-2 items-center">
-								<div class="w-4 h-4 rounded-full bg-gray-200"></div>
+								<span
+									class="rounded-full w-4 h-4 bg-gray-200"
+									style="background-color: {tag.color}"
+								/>
 								<span>{tag.name}</span>
 							</div>
 						{/each}

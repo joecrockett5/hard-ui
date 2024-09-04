@@ -33,9 +33,9 @@
 			<RedPlus />
 		</Button>
 	</Sheet.Trigger>
-	<Sheet.Content class="justify-center" side="bottom">
+	<Sheet.Content side="bottom">
 		<Sheet.Header>
-			<Sheet.Title>Hard</Sheet.Title>
+			<Sheet.Title><a href="/">Hard</a></Sheet.Title>
 			<Sheet.Description>lorem ipsum dolor sit amet, consectetur adipiscing</Sheet.Description>
 		</Sheet.Header>
 		<div class="grid gap-4 py-4">
@@ -51,7 +51,7 @@
 	</Sheet.Content>
 </Sheet.Root>
 
-<div class="mx-4">
+<div class="mx-4 mt-4">
 	<ScrollArea>
 		<slot />
 	</ScrollArea>
