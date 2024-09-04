@@ -1,4 +1,4 @@
-import type { PageLoad } from './$types';
+import type { PageLoad } from '../[date]/$types';
 import type { Exercise, WorkoutInfo } from '$lib/types';
 
 export const load = (async ({ params }) => {
