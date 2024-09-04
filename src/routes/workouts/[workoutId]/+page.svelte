@@ -4,7 +4,7 @@
 
 	export let data;
 
-	const { date, workoutTitle, exercises, workoutInfo } = data;
+	const { exercises, workoutInfo } = data;
 </script>
 
 <WorkoutInfoComponent workout={workoutInfo} />

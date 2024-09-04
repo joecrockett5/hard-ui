@@ -15,10 +15,10 @@
 	</Card.Header>
 </Card.Root>
 
-{#each exercises as exercise}
-	<ExerciseInfoComponent {exercise} />
-{/each}
-
 <NewItem item="Exercise">
 	<!-- TODO: Add NewItem form -->
 </NewItem>
+
+{#each exercises as exercise}
+	<ExerciseInfoComponent {exercise} />
+{/each}

@@ -1,9 +1,7 @@
 import type { PageLoad } from '../[date]/$types';
 import type { Exercise, WorkoutInfo } from '$lib/types';
 
-export const load = (async ({ params }) => {
-	const { date, workoutTitle } = params;
-
+export const load = (async () => {
 	const exercises: Exercise[] = [
 		{
 			name: 'Squat',
