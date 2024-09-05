@@ -5,7 +5,7 @@
 	export let workout: WorkoutInfo;
 </script>
 
-<Card.Root>
+<Card.Root class="mt-4">
 	<Card.Header>
 		<Card.Title>{workout.workoutTitle}</Card.Title>
 		<Card.Description>Workout on {workout.date}</Card.Description>

@@ -161,8 +161,6 @@ export const load = (async () => {
 		notes: 'This is a note'
 	};
 	return {
-		date,
-		workoutTitle,
 		exercises,
 		workoutInfo
 	};
