@@ -9,7 +9,7 @@
 <Dialog.Root>
 	<Dialog.Trigger class={buttonVariants({ variant: 'outline' }) + ' w-full text-gray-400 mt-1'}>
 		<Plus />
-		New {item}
+		Add {item}
 	</Dialog.Trigger>
 	<Dialog.Content class="w-3/4 max-w-lg">
 		<Dialog.Header>

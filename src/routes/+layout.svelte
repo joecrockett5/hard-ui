@@ -51,7 +51,7 @@
 	</Sheet.Content>
 </Sheet.Root>
 
-<div class="mx-4 mt-4">
+<div class="mx-4 mb-4">
 	<ScrollArea>
 		<slot />
 	</ScrollArea>

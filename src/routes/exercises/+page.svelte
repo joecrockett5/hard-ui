@@ -8,7 +8,7 @@
 	let { exercises } = data;
 </script>
 
-<Card.Root>
+<Card.Root class="mt-4">
 	<Card.Header>
 		<Card.Title>Exercises</Card.Title>
 		<Card.Description>All registered exercises</Card.Description>

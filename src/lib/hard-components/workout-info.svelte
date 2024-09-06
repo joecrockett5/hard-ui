@@ -3,11 +3,14 @@
 	import * as Card from '$lib/components/ui/card';
 
 	export let workout: WorkoutInfo;
+	export let href: string;
 </script>
 
 <Card.Root class="mt-4">
 	<Card.Header>
-		<Card.Title>{workout.workoutTitle}</Card.Title>
+		<Card.Title>
+			<a {href}>{workout.workoutTitle}</a>
+		</Card.Title>
 		<Card.Description>Workout on {workout.date}</Card.Description>
 	</Card.Header>
 	<Card.Content>

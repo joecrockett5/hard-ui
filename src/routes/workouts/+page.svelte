@@ -2,9 +2,11 @@
 	import { getLocalTimeZone, today } from '@internationalized/date';
 	import { Calendar } from '$lib/components/ui/calendar/index.js';
 	import * as Card from '$lib/components/ui/card/index.js';
+	import { goto } from '$app/navigation';
 
 	import type { WorkoutInfo } from '$lib/types';
 	import WorkoutInfoComponent from '$lib/hard-components/workout-info.svelte';
+	import NewItem from '$lib/hard-components/new-item.svelte';
 
 	let selectedDate = today(getLocalTimeZone());
 
@@ -85,8 +87,12 @@
 	</Card.Header>
 </Card.Root>
 
+<NewItem item="Workout">
+	<!-- TODO: Add NewItem form -->
+</NewItem>
+
 {#if workouts.length > 0}
 	{#each workouts as workout}
-		<WorkoutInfoComponent {workout} />
+		<WorkoutInfoComponent {workout} href="/workouts/{workout.workoutTitle}" />
 	{/each}
 {/if}
