@@ -1,6 +1,12 @@
 <script lang="ts">
 	import '../app.css';
 
+	import {
+		PUBLIC_USER_POOL_ID,
+		PUBLIC_USER_POOL_CLIENT_ID,
+		PUBLIC_OAUTH_DOMAIN,
+		PUBLIC_REDIRECT
+	} from '$env/static/public';
 	import { Amplify } from 'aws-amplify';
 	import { fetchAuthSession, signInWithRedirect } from 'aws-amplify/auth';
 	import * as Sheet from '$lib/components/ui/sheet/index.js';
@@ -11,15 +17,15 @@
 	Amplify.configure({
 		Auth: {
 			Cognito: {
-				userPoolId: 'eu-west-2_g70ekREnm',
-				userPoolClientId: '2pa9i84eu8oflrarbm9v4hg3pc',
+				userPoolId: PUBLIC_USER_POOL_ID,
+				userPoolClientId: PUBLIC_USER_POOL_CLIENT_ID,
 				signUpVerificationMethod: 'code',
 				loginWith: {
 					oauth: {
-						domain: 'hard.auth.eu-west-2.amazoncognito.com',
+						domain: PUBLIC_OAUTH_DOMAIN,
 						scopes: ['openid', 'email'],
-						redirectSignIn: ['https://vite.joecrockett.uk'],
-						redirectSignOut: ['https://vite.joecrockett.uk'],
+						redirectSignIn: [PUBLIC_REDIRECT],
+						redirectSignOut: [PUBLIC_REDIRECT],
 						responseType: 'code'
 					}
 				}
