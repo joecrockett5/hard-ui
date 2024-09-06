@@ -2,6 +2,7 @@
 	import '../app.css';
 
 	import { Amplify } from 'aws-amplify';
+	import { fetchAuthSession, signInWithRedirect } from 'aws-amplify/auth';
 	import * as Sheet from '$lib/components/ui/sheet/index.js';
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
@@ -17,8 +18,8 @@
 					oauth: {
 						domain: 'hard.auth.eu-west-2.amazoncognito.com',
 						scopes: ['openid', 'email'],
-						redirectSignIn: ['http://localhost:5173'],
-						redirectSignOut: ['http://localhost:5173'],
+						redirectSignIn: ['https://vite.joecrockett.uk'],
+						redirectSignOut: ['https://vite.joecrockett.uk'],
 						responseType: 'code'
 					}
 				}
@@ -27,32 +28,44 @@
 	});
 </script>
 
-<Sheet.Root>
-	<Sheet.Trigger asChild let:builder>
-		<Button builders={[builder]} variant="ghost" size="icon" class="fixed right-4 bottom-4 z-50">
-			<RedPlus />
-		</Button>
-	</Sheet.Trigger>
-	<Sheet.Content side="bottom">
-		<Sheet.Header>
-			<Sheet.Title><a href="/">Hard</a></Sheet.Title>
-			<Sheet.Description>lorem ipsum dolor sit amet, consectetur adipiscing</Sheet.Description>
-		</Sheet.Header>
-		<div class="grid gap-4 py-4">
-			<div class="grid grid-cols-4 items-center gap-4">
-				<Button href="/workouts" variant="secondary">Workouts</Button>
-				<Button href="/exercises" variant="secondary">Exercises</Button>
-			</div>
-			<div class="grid grid-cols-4 items-center gap-4">
-				<Button href="/tags" variant="secondary">Tags</Button>
-				<Button href="/meso-cycles" variant="secondary">Meso Cycles</Button>
-			</div>
-		</div>
-	</Sheet.Content>
-</Sheet.Root>
+{#await fetchAuthSession() then session}
+	{#if session.tokens?.idToken}
+		<Sheet.Root>
+			<Sheet.Trigger asChild let:builder>
+				<Button
+					builders={[builder]}
+					variant="ghost"
+					size="icon"
+					class="fixed right-4 bottom-4 z-50"
+				>
+					<RedPlus />
+				</Button>
+			</Sheet.Trigger>
+			<Sheet.Content side="bottom">
+				<Sheet.Header>
+					<Sheet.Title><a href="/">Hard</a></Sheet.Title>
+					<Sheet.Description>lorem ipsum dolor sit amet, consectetur adipiscing</Sheet.Description>
+				</Sheet.Header>
+				<div class="grid gap-4 py-4">
+					<div class="grid grid-cols-4 items-center gap-4">
+						<Button href="/workouts" variant="secondary">Workouts</Button>
+						<Button href="/exercises" variant="secondary">Exercises</Button>
+					</div>
+					<div class="grid grid-cols-4 items-center gap-4">
+						<Button href="/tags" variant="secondary">Tags</Button>
+						<Button href="/meso-cycles" variant="secondary">Meso Cycles</Button>
+					</div>
+				</div>
+			</Sheet.Content>
+		</Sheet.Root>
 
-<div class="mx-4 mb-4">
-	<ScrollArea>
-		<slot />
-	</ScrollArea>
-</div>
+		<div class="mx-4 mb-4">
+			<ScrollArea>
+				<slot />
+			</ScrollArea>
+		</div>
+	{:else}
+		<p>Please Log In</p>
+		<Button class="mt-4" on:click={() => signInWithRedirect()}>Sign In</Button>
+	{/if}
+{/await}
