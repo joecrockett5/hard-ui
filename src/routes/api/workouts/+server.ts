@@ -6,6 +6,7 @@ export const GET: RequestHandler = async () => {
 	console.log('GET /api/workouts');
 	const session = await fetchAuthSession();
 	if (!session.tokens?.idToken) {
+		console.log('Missing tokens');
 		return new Response('Unauthorized', { status: 401 });
 	}
 	const response = await fetch(`${HARD_API}/workouts`, {
