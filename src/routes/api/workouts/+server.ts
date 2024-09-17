@@ -1,18 +1,15 @@
 import { HARD_API } from '$env/static/private';
 import { type RequestHandler } from '@sveltejs/kit';
-import { fetchAuthSession } from 'aws-amplify/auth';
 
-export const GET: RequestHandler = async () => {
+export const GET: RequestHandler = async ({ url }) => {
 	console.log('GET /api/workouts');
-	const session = await fetchAuthSession();
-	if (!session.tokens?.idToken) {
-		console.log('Missing tokens');
+	const token = url.searchParams.get('token');
+	if (!token) {
+		console.log('Missing token');
 		return new Response('Unauthorized', { status: 401 });
 	}
 	const response = await fetch(`${HARD_API}/workouts`, {
-		headers: { Authorization: `Bearer ${session.tokens.idToken}` }
+		headers: { Authorization: `Bearer ${token}` }
 	});
-	const json = await response.json();
-	console.log(json);
-	return json;
+	return response;
 };

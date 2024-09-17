@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getCurrentUser } from 'aws-amplify/auth';
+	import { getCurrentUser, fetchAuthSession } from 'aws-amplify/auth';
 	import { Button } from '$lib/components/ui/button/index.js';
 </script>
 
@@ -12,6 +12,7 @@
 <Button
 	on:click={async () => {
 		console.log('Fetching workouts');
-		fetch('/api/workouts');
+		const session = await fetchAuthSession();
+		fetch(`/api/workouts?token=${session.tokens?.idToken}`);
 	}}>Fetch Workouts</Button
 >
