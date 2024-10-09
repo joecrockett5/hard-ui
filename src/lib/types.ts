@@ -11,13 +11,13 @@ export type Tag = Base & {
 };
 
 export type Set = Base & {
-	setType: string;
+	setType: 'working' | 'warmup';
 	weight: number;
-	weightUnit: string;
+	weightUnit: 'kg' | 'lbs';
 	reps: number;
 	tags?: Tag[];
 	notes?: string;
-	comparison: string;
+	exerciseJoinId: string;
 };
 
 export type Exercise = Base & {
