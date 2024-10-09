@@ -13,3 +13,18 @@ export const GET: RequestHandler = async ({ url }) => {
 	});
 	return response;
 };
+
+export const POST: RequestHandler = async ({ url, request }) => {
+	console.log('POST /api/workouts');
+	const token = url.searchParams.get('token');
+	if (!token) {
+		console.log('Missing token');
+		return new Response('Unauthorized', { status: 401 });
+	}
+	const response = await fetch(`${HARD_API}/workouts`, {
+		method: 'POST',
+		headers: { Authorization: `Bearer ${token}` },
+		body: request.body
+	});
+	return response;
+};
