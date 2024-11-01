@@ -63,25 +63,21 @@ export const GET: RequestHandler = async ({ url }) => {
 };
 
 export const POST: RequestHandler = async ({ url, request }) => {
-	console.log('POST /api/exercisejoins');
+	console.log('POST /api/exercise-joins');
 	const token = url.searchParams.get('token');
 	if (!token) {
 		console.log('Missing token');
 		return new Response('Unauthorized', { status: 401 });
 	}
 	const json = await request.json();
-	const tags = json.tags;
 	const formattedBody = {
-		exercisejoin_date: json.exercisejoinDate,
-		notes: json.notes,
-		title: json.title
+		workout_id: json.workoutId,
+		exercise_id: json.exerciseId
 	};
-	const response = await fetch(`${HARD_API}/exercisejoins`, {
+	const response = await fetch(`${HARD_API}/exercise-joins`, {
 		method: 'POST',
 		headers: { Authorization: `Bearer ${token}` },
 		body: JSON.stringify(formattedBody)
 	});
-	const failedTags = await postTags(token, json.objectId, tags);
-	console.log(`failed tags: ${failedTags}`);
 	return response;
 };

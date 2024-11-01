@@ -68,38 +68,29 @@ export const PUT: RequestHandler = async ({ url, params, request }) => {
 		return new Response('Unauthorized', { status: 401 });
 	}
 	const json = await request.json();
-	const tags = json.tags;
 	const formattedBody = {
-		timestamp: json.timestamp,
-		object_id: json.objectId,
-		exercisejoin_date: json.exercisejoinDate,
-		notes: json.notes,
-		title: json.title
+		workout_id: json.workoutId,
+		exercise_id: json.exerciseId
 	};
-	const response = await fetch(`${HARD_API}/exercisejoins/${exercisejoinId}`, {
+	const response = await fetch(`${HARD_API}/exercise-joins/${exercisejoinId}`, {
 		method: 'PUT',
 		headers: { Authorization: `Bearer ${token}` },
 		body: JSON.stringify(formattedBody)
 	});
-	const failedTags = await putTags(token, tags);
-	console.log(`failed tags: ${failedTags}`);
 	return response;
 };
 
 export const DELETE: RequestHandler = async ({ url, params }) => {
 	const { exercisejoinId } = params;
-	console.log(`DELETE /api/exercisejoins/${exercisejoinId}`);
+	console.log(`DELETE /api/exercise-joins/${exercisejoinId}`);
 	const token = url.searchParams.get('token');
 	if (!token) {
 		console.log('Missing token');
 		return new Response('Unauthorized', { status: 401 });
 	}
-	const tags = await getTags(token, exercisejoinId);
-	const response = await fetch(`${HARD_API}/exercisejoins/${exercisejoinId}`, {
+	const response = await fetch(`${HARD_API}/exercise-joins/${exercisejoinId}`, {
 		method: 'DELETE',
 		headers: { Authorization: `Bearer ${token}` }
 	});
-	const failedTags = await deleteTags(token, tags);
-	console.log(`failed tags: ${failedTags}`);
 	return response;
 };
