@@ -1,0 +1,79 @@
+import { HARD_API } from '$env/static/private';
+import { type RequestHandler } from '@sveltejs/kit';
+import { getTags, putTags, deleteTags } from '$lib/tag-helpers';
+
+export const GET: RequestHandler = async ({ url, params }) => {
+	const { workoutId } = params;
+	console.log(`GET /api/workouts/${workoutId}`);
+	const token = url.searchParams.get('token');
+	if (!token) {
+		console.log('Missing token');
+		return new Response('Unauthorized', { status: 401 });
+	}
+	const response = await fetch(`${HARD_API}/workouts/${workoutId}`, {
+		headers: { Authorization: `Bearer ${token}` }
+	});
+	const tags = await getTags(token, workoutId);
+	const json = await response.json();
+	const formattedBody = {
+		userId: json.user_id,
+		timestamp: json.timestamp,
+		objectType: json.object_type,
+		objectId: json.object_id,
+		workoutDate: json.workout_date,
+		notes: json.notes,
+		title: json.title,
+		tags
+	};
+	return new Response(JSON.stringify(formattedBody), {
+		status: response.status,
+		headers: response.headers
+	});
+};
+
+export const PUT: RequestHandler = async ({ url, params, request }) => {
+	const { workoutId } = params;
+	console.log(`PUT /api/workouts/${workoutId}`);
+	const token = url.searchParams.get('token');
+	if (!token) {
+		console.log('Missing token');
+		return new Response('Unauthorized', { status: 401 });
+	}
+	const json = await request.json();
+	const tags = json.tags;
+	const formattedBody = {
+		user_id: json.userId,
+		timestamp: json.timestamp,
+		object_type: json.objectType,
+		object_id: json.objectId,
+		workout_date: json.workoutDate,
+		notes: json.notes,
+		title: json.title
+	};
+	const response = await fetch(`${HARD_API}/workouts/${workoutId}`, {
+		method: 'PUT',
+		headers: { Authorization: `Bearer ${token}` },
+		body: JSON.stringify(formattedBody)
+	});
+	const failedTags = await putTags(token, tags);
+	console.log(`failed tags: ${failedTags}`);
+	return response;
+};
+
+export const DELETE: RequestHandler = async ({ url, params }) => {
+	const { workoutId } = params;
+	console.log(`DELETE /api/workouts/${workoutId}`);
+	const token = url.searchParams.get('token');
+	if (!token) {
+		console.log('Missing token');
+		return new Response('Unauthorized', { status: 401 });
+	}
+	const tags = await getTags(token, workoutId);
+	const response = await fetch(`${HARD_API}/workouts/${workoutId}`, {
+		method: 'DELETE',
+		headers: { Authorization: `Bearer ${token}` }
+	});
+	const failedTags = await deleteTags(token, tags);
+	console.log(`failed tags: ${failedTags}`);
+	return response;
+};
