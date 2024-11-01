@@ -1,6 +1,7 @@
 import { HARD_API } from '$env/static/private';
 import { type RequestHandler } from '@sveltejs/kit';
 import { getTags, putTags, deleteTags } from '$lib/tag-helpers';
+import { type Workout } from '$lib/types';
 
 export const GET: RequestHandler = async ({ url, params }) => {
 	const { workoutId } = params;
@@ -15,7 +16,7 @@ export const GET: RequestHandler = async ({ url, params }) => {
 	});
 	const tags = await getTags(token, workoutId);
 	const json = await response.json();
-	const formattedBody = {
+	const formattedBody: Workout = {
 		userId: json.user_id,
 		timestamp: json.timestamp,
 		objectType: json.object_type,
@@ -42,9 +43,7 @@ export const PUT: RequestHandler = async ({ url, params, request }) => {
 	const json = await request.json();
 	const tags = json.tags;
 	const formattedBody = {
-		user_id: json.userId,
 		timestamp: json.timestamp,
-		object_type: json.objectType,
 		object_id: json.objectId,
 		workout_date: json.workoutDate,
 		notes: json.notes,

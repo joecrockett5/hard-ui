@@ -1,5 +1,6 @@
 import { HARD_API } from '$env/static/private';
 import { type RequestHandler } from '@sveltejs/kit';
+import { type Workout } from '$lib/types';
 import { getTags, postTags } from '$lib/tag-helpers';
 
 export const GET: RequestHandler = async ({ url }) => {
@@ -15,7 +16,7 @@ export const GET: RequestHandler = async ({ url }) => {
 		headers: { Authorization: `Bearer ${token}` }
 	});
 	const rawWorkouts = await response.json();
-	const workouts = [];
+	const workouts: Workout[] = [];
 	rawWorkouts.forEach((workout) => {
 		const tags = await getTags(token, workout.object_id);
 		workouts.push({
@@ -29,7 +30,10 @@ export const GET: RequestHandler = async ({ url }) => {
 			tags
 		});
 	});
-	return response;
+	return new Response(JSON.stringify(workouts), {
+		status: response.status,
+		headers: response.headers
+	});
 };
 
 export const POST: RequestHandler = async ({ url, request }) => {
@@ -42,8 +46,6 @@ export const POST: RequestHandler = async ({ url, request }) => {
 	const json = await request.json();
 	const tags = json.tags;
 	const formattedBody = {
-		timestamp: new Date().toISOString(),
-		object_id: json.objectId,
 		workout_date: json.workoutDate,
 		notes: json.notes,
 		title: json.title
