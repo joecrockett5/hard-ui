@@ -7,7 +7,7 @@ type Base = {
 
 export type Tag = Base & {
 	name: string;
-	color: string;
+	colorHex: string;
 };
 
 export type Set = Base & {
