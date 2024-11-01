@@ -26,6 +26,7 @@ export type Exercise = Base & {
 	tags?: Tag[];
 	sets?: Set[];
 	joinId?: string;
+	workoutId?: string;
 };
 
 export type WorkoutInfo = Base & {
