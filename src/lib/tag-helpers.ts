@@ -21,7 +21,7 @@ export const postTags = async (token: string, targetId: string, tags: Tag[]) => 
 		return;
 	}
 	const failedTags: Tag[] = [];
-	tags.forEach((tag) => {
+	for (const tag of tags) {
 		console.log(`Tagging ${targetId} with ${tag.name}`);
 		const res = await fetch(`${HARD_API}/tag-joins`, {
 			method: 'POST',
@@ -35,7 +35,7 @@ export const postTags = async (token: string, targetId: string, tags: Tag[]) => 
 		if (!res.ok) {
 			failedTags.push(tag);
 		}
-	});
+	}
 	if (failedTags.length > 0) {
 		console.log(`Failed to tag ${targetId} with ${failedTags.map((tag) => tag.name).join(', ')}`);
 		return failedTags;
@@ -49,7 +49,7 @@ export const putTags = async (token: string, tags: Tag[]) => {
 		return;
 	}
 	const failedTags: Tag[] = [];
-	tags.forEach((tag) => {
+	for (const tag of tags) {
 		console.log(`Updating ${tag.name} instance (${tag.objectId})`);
 		const res = await fetch(`${HARD_API}/tag-joins/${tag.objectId}`, {
 			method: 'PUT',
@@ -59,7 +59,7 @@ export const putTags = async (token: string, tags: Tag[]) => {
 		if (!res.ok) {
 			failedTags.push(tag);
 		}
-	});
+	}
 	if (failedTags.length > 0) {
 		console.log(
 			`Failed to update tag(s) with id(s): ${failedTags.map((tag) => tag.objectId).join(', ')}`
@@ -75,7 +75,7 @@ export const deleteTags = async (token: string, tags: Tag[]) => {
 		return;
 	}
 	const failedTags: Tag[] = [];
-	tags.forEach((tag) => {
+	for (const tag of tags) {
 		console.log(`Deleting ${tag.name} instance (${tag.objectId})`);
 		const res = await fetch(`${HARD_API}/tag-joins/${tag.objectId}`, {
 			method: 'DELETE',
@@ -84,7 +84,7 @@ export const deleteTags = async (token: string, tags: Tag[]) => {
 		if (!res.ok) {
 			failedTags.push(tag);
 		}
-	});
+	}
 	if (failedTags.length > 0) {
 		console.log(
 			`Failed to delete tag(s) with id(s): ${failedTags.map((tag) => tag.objectId).join(', ')}`

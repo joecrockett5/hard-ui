@@ -13,6 +13,7 @@
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import RedPlus from '$lib/svg/red-plus.svelte';
+	import { browser } from '$app/environment';
 
 	Amplify.configure({
 		Auth: {
@@ -32,10 +33,20 @@
 			}
 		}
 	});
+
+	const getIdToken = async () => {
+		const session = await fetchAuthSession();
+		if (session.tokens?.idToken !== undefined && browser) {
+			console.log('Setting idToken to ', session.tokens.idToken.toString());
+			document.cookie = `idToken=${session.tokens.idToken.toString()}; path=/`;
+			return session.tokens.idToken.toString();
+		}
+		return undefined;
+	};
 </script>
 
-{#await fetchAuthSession() then session}
-	{#if session.tokens?.idToken}
+{#await getIdToken() then idToken}
+	{#if idToken}
 		<Sheet.Root>
 			<Sheet.Trigger asChild let:builder>
 				<Button

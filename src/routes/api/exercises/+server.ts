@@ -8,7 +8,7 @@ export const GET: RequestHandler = async ({ url }) => {
 	// will then add tag support
 	console.log('GET /api/exercises');
 	const token = url.searchParams.get('token');
-	if (!token) {
+	if (!token || token == undefined) {
 		console.log('Missing token');
 		return new Response('Unauthorized', { status: 401 });
 	}
@@ -17,18 +17,19 @@ export const GET: RequestHandler = async ({ url }) => {
 	});
 	const rawexercises = await response.json();
 	const exercises: Exercise[] = [];
-	rawexercises.forEach((exercise) => {
-		const tags = await getTags(token, exercise.object_id);
+	for (const exercise of rawexercises) {
+		// const tags = await getTags(token, exercise.object_id);
+		const tags = [];
 		exercises.push({
 			userId: exercise.user_id,
 			timestamp: exercise.timestamp,
 			objectType: exercise.object_type,
 			objectId: exercise.object_id,
 			name: exercise.name,
-			description: exercise.description,
+			description: exercise.description ?? '',
 			tags
 		});
-	});
+	}
 	return new Response(JSON.stringify(exercises), {
 		status: response.status,
 		headers: response.headers
