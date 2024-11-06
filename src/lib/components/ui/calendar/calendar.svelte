@@ -63,6 +63,13 @@
 		<Button
 			class="mt-2 flex"
 			variant="outline"
+			on:click={() => (value = value.subtract({ days: 1 }))}
+		>
+			&lt;
+		</Button>
+		<Button
+			class="mt-2 flex"
+			variant="outline"
 			on:click={() => (value = today(getLocalTimeZone()).subtract({ days: 1 }))}
 		>
 			Yesterday
@@ -73,6 +80,9 @@
 			on:click={() => (value = today(getLocalTimeZone()))}
 		>
 			Today
+		</Button>
+		<Button class="mt-2 flex" variant="outline" on:click={() => (value = value.add({ days: 1 }))}>
+			&gt;
 		</Button>
 	</div>
 </CalendarPrimitive.Root>
