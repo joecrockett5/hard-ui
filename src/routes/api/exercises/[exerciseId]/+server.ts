@@ -49,11 +49,11 @@ export const PUT: RequestHandler = async ({ url, params, request }) => {
 	};
 	const response = await fetch(`${HARD_API}/exercises/${exerciseId}`, {
 		method: 'PUT',
-		headers: { Authorization: `Bearer ${token}` },
+		headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
 		body: JSON.stringify(formattedBody)
 	});
-	const failedTags = await putTags(token, tags);
-	console.log(`failed tags: ${failedTags}`);
+	// const failedTags = await putTags(token, tags);
+	// console.log(`failed tags: ${failedTags}`);
 	return response;
 };
 

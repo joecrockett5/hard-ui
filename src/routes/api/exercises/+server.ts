@@ -18,8 +18,7 @@ export const GET: RequestHandler = async ({ url }) => {
 	const rawexercises = await response.json();
 	const exercises: Exercise[] = [];
 	for (const exercise of rawexercises) {
-		// const tags = await getTags(token, exercise.object_id);
-		const tags = [];
+		const tags = await getTags(token, exercise.object_id);
 		exercises.push({
 			userId: exercise.user_id,
 			timestamp: exercise.timestamp,
@@ -51,10 +50,12 @@ export const POST: RequestHandler = async ({ url, request }) => {
 	};
 	const response = await fetch(`${HARD_API}/exercises`, {
 		method: 'POST',
-		headers: { Authorization: `Bearer ${token}` },
+		headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
 		body: JSON.stringify(formattedBody)
 	});
-	const failedTags = await postTags(token, json.objectId, tags);
-	console.log(`failed tags: ${failedTags}`);
+	console.log(`status: ${response.status}`);
+	console.log(`body: ${response.body}`);
+	// const failedTags = await postTags(token, json.objectId, tags);
+	// console.log(`failed tags: ${failedTags}`);
 	return response;
 };

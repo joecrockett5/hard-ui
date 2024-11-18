@@ -11,7 +11,14 @@ export const getTags = async (token: string, objectId: string) => {
 		headers: { Authorization: `Bearer ${token}` }
 	});
 	const tags = await response.json();
-	return tags;
+	const outputTags: Tag[] = [];
+	for (const tag of tags) {
+		outputTags.push({
+			name: tag.name,
+			colorHex: tag.color_hex
+		});
+	}
+	return outputTags;
 };
 
 export const postTags = async (token: string, targetId: string, tags: Tag[]) => {

@@ -1,5 +1,4 @@
 import type { PageLoad } from './$types';
-import type { Exercise } from '$lib/types';
 
 export const load = (async ({ fetch, cookies }) => {
 	const idToken = cookies.get('idToken');
