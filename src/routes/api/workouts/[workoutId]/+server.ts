@@ -41,7 +41,6 @@ export const PUT: RequestHandler = async ({ url, params, request }) => {
 		return new Response('Unauthorized', { status: 401 });
 	}
 	const json = await request.json();
-	const tags = json.tags;
 	const formattedBody = {
 		timestamp: json.timestamp,
 		object_id: json.objectId,
@@ -51,11 +50,11 @@ export const PUT: RequestHandler = async ({ url, params, request }) => {
 	};
 	const response = await fetch(`${HARD_API}/workouts/${workoutId}`, {
 		method: 'PUT',
-		headers: { Authorization: `Bearer ${token}` },
+		headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
 		body: JSON.stringify(formattedBody)
 	});
-	const failedTags = await putTags(token, tags);
-	console.log(`failed tags: ${failedTags}`);
+	// const failedTags = await putTags(token, tags);
+	// console.log(`failed tags: ${failedTags}`);
 	return response;
 };
 
@@ -67,12 +66,12 @@ export const DELETE: RequestHandler = async ({ url, params }) => {
 		console.log('Missing token');
 		return new Response('Unauthorized', { status: 401 });
 	}
-	const tags = await getTags(token, workoutId);
+	// const tags = await getTags(token, workoutId);
 	const response = await fetch(`${HARD_API}/workouts/${workoutId}`, {
 		method: 'DELETE',
 		headers: { Authorization: `Bearer ${token}` }
 	});
-	const failedTags = await deleteTags(token, tags);
-	console.log(`failed tags: ${failedTags}`);
+	// const failedTags = await deleteTags(token, tags);
+	// console.log(`failed tags: ${failedTags}`);
 	return response;
 };

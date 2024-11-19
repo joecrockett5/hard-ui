@@ -30,8 +30,8 @@ export type Exercise = Base & {
 };
 
 export type WorkoutInfo = Base & {
-	date: string;
-	workoutTitle: string;
+	workoutDate: string;
+	title: string;
 	tags: Tag[];
 	notes: string;
 };

@@ -1,24 +1,24 @@
 import { HARD_API } from '$env/static/private';
 import { type RequestHandler } from '@sveltejs/kit';
-import { type Workout } from '$lib/types';
+import { type WorkoutInfo } from '$lib/types';
 import { getTags, postTags } from '$lib/tag-helpers';
 
 export const GET: RequestHandler = async ({ url }) => {
 	// Need to update backend to allow for filtering by workout_date
 	// will then add tag support
-	console.log('GET /api/workouts');
+	const date = url.searchParams.get('date');
+	console.log('GET /api/workouts' + (date ? `?date=${date}` : ''));
 	const token = url.searchParams.get('token');
 	if (!token) {
 		console.log('Missing token');
 		return new Response('Unauthorized', { status: 401 });
 	}
-	const response = await fetch(`${HARD_API}/workouts`, {
+	const response = await fetch(`${HARD_API}/workouts` + (date ? `?date=${date}` : ''), {
 		headers: { Authorization: `Bearer ${token}` }
 	});
 	const rawWorkouts = await response.json();
-	const workouts: Workout[] = [];
-	rawWorkouts.forEach((workout) => {
-		const tags = await getTags(token, workout.object_id);
+	const workouts: WorkoutInfo[] = [];
+	for (const workout of rawWorkouts) {
 		workouts.push({
 			userId: workout.user_id,
 			timestamp: workout.timestamp,
@@ -27,12 +27,11 @@ export const GET: RequestHandler = async ({ url }) => {
 			workoutDate: workout.workout_date,
 			notes: workout.notes,
 			title: workout.title,
-			tags
+			tags: []
 		});
-	});
+	}
 	return new Response(JSON.stringify(workouts), {
-		status: response.status,
-		headers: response.headers
+		status: response.status
 	});
 };
 
@@ -50,12 +49,13 @@ export const POST: RequestHandler = async ({ url, request }) => {
 		notes: json.notes,
 		title: json.title
 	};
+	console.log(formattedBody);
 	const response = await fetch(`${HARD_API}/workouts`, {
 		method: 'POST',
-		headers: { Authorization: `Bearer ${token}` },
+		headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
 		body: JSON.stringify(formattedBody)
 	});
-	const failedTags = await postTags(token, json.objectId, tags);
-	console.log(`failed tags: ${failedTags}`);
+	// const failedTags = await postTags(token, json.objectId, tags);
+	// console.log(`failed tags: ${failedTags}`);
 	return response;
 };
