@@ -1,0 +1,35 @@
+import type { Exercise, WorkoutInfo, Set } from '$lib/types';
+import type { PageLoad } from './$types';
+
+export const load = (async ({ fetch, cookies, params }) => {
+	const idToken = cookies.get('idToken');
+	const workoutId = params.workoutId;
+	console.log('idToken: ', idToken);
+	const response = await fetch(`/api/workouts/${workoutId}?token=${idToken}`);
+
+	if (!response.ok) {
+		throw new Error('Failed to fetch exercises');
+	}
+
+	const workoutInfo: WorkoutInfo = await response.json();
+
+	const exercisesResponse = await fetch(
+		`/api/exercises?workout=${workoutInfo.objectId}&token=${idToken}`
+	);
+	const exercises: Exercise[] = await exercisesResponse.json();
+
+	console.log(`workout: ${workoutInfo.title}, found ${exercises.length} exercises`);
+
+	for (const exercise of exercises) {
+		const setsResponse = await fetch(
+			`/api/sets?workout=${workoutInfo.objectId}&exercise=${exercise.objectId}&token=${idToken}`
+		);
+		const sets: Set[] = await setsResponse.json();
+		exercise.sets = sets;
+	}
+
+	return {
+		workoutInfo,
+		exercises
+	};
+}) satisfies PageLoad;

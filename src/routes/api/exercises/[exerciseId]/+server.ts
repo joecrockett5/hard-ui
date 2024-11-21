@@ -26,8 +26,7 @@ export const GET: RequestHandler = async ({ url, params }) => {
 		tags
 	};
 	return new Response(JSON.stringify(formattedBody), {
-		status: response.status,
-		headers: response.headers
+		status: response.status
 	});
 };
 

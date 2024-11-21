@@ -17,8 +17,7 @@ export const GET: RequestHandler = async ({ url }) => {
 	});
 	const rawSets = await response.json();
 	const sets: Set[] = [];
-	rawSets.forEach((set) => {
-		const tags = await getTags(token, set.object_id);
+	for (const set of rawSets) {
 		sets.push({
 			userId: set.user_id,
 			timestamp: set.timestamp,
@@ -29,13 +28,11 @@ export const GET: RequestHandler = async ({ url }) => {
 			weightUnit: set.weight_unit,
 			reps: set.reps,
 			notes: set.notes,
-			exerciseJoinId: set.exercise_join_id,
-			tags
+			exerciseJoinId: set.exercise_join_id
 		});
-	});
+	}
 	return new Response(JSON.stringify(sets), {
-		status: response.status,
-		headers: response.headers
+		status: response.status
 	});
 };
 

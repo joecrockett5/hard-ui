@@ -8,11 +8,13 @@ export const GET: RequestHandler = async ({ url }) => {
 	// will then add tag support
 	console.log('GET /api/exercises');
 	const token = url.searchParams.get('token');
+	const workout = url.searchParams.get('workout');
 	if (!token || token == undefined) {
 		console.log('Missing token');
 		return new Response('Unauthorized', { status: 401 });
 	}
-	const response = await fetch(`${HARD_API}/exercises`, {
+	const response = await fetch(`${HARD_API}/exercises` + (workout ? `?workout=${workout}` : ''), {
+		method: 'GET',
 		headers: { Authorization: `Bearer ${token}` }
 	});
 	const rawexercises = await response.json();
@@ -30,8 +32,7 @@ export const GET: RequestHandler = async ({ url }) => {
 		});
 	}
 	return new Response(JSON.stringify(exercises), {
-		status: response.status,
-		headers: response.headers
+		status: response.status
 	});
 };
 

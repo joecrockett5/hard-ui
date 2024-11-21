@@ -17,7 +17,7 @@ export const GET: RequestHandler = async ({ url }) => {
 	});
 	const rawExerciseJoins = await response.json();
 	const exercises: Exercise[] = [];
-	rawExerciseJoins.forEach((exerciseJoin) => {
+	for (const exerciseJoin of rawExerciseJoins) {
 		const exerciseTags = await getTags(token, exerciseJoin.exercise_id);
 
 		const exerciseResponse = await fetch(`${HARD_API}/exercises/${exerciseJoin.exercise_id}`, {
@@ -55,7 +55,7 @@ export const GET: RequestHandler = async ({ url }) => {
 				};
 			})
 		});
-	});
+	}
 	return new Response(JSON.stringify(exercises), {
 		status: response.status,
 		headers: response.headers
@@ -76,7 +76,7 @@ export const POST: RequestHandler = async ({ url, request }) => {
 	};
 	const response = await fetch(`${HARD_API}/exercise-joins`, {
 		method: 'POST',
-		headers: { Authorization: `Bearer ${token}` },
+		headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
 		body: JSON.stringify(formattedBody)
 	});
 	return response;

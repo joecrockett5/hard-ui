@@ -14,7 +14,7 @@ export const GET: RequestHandler = async ({ url, params }) => {
 	const response = await fetch(`${HARD_API}/workouts/${workoutId}`, {
 		headers: { Authorization: `Bearer ${token}` }
 	});
-	const tags = await getTags(token, workoutId);
+	// const tags = await getTags(token, workoutId);
 	const json = await response.json();
 	const formattedBody: Workout = {
 		userId: json.user_id,
@@ -24,7 +24,7 @@ export const GET: RequestHandler = async ({ url, params }) => {
 		workoutDate: json.workout_date,
 		notes: json.notes,
 		title: json.title,
-		tags
+		tags: []
 	};
 	return new Response(JSON.stringify(formattedBody), {
 		status: response.status,

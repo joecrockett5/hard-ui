@@ -4,6 +4,7 @@
 	import { Plus } from 'lucide-svelte';
 
 	export let item: string = 'Item';
+	export let description: string = `Create a new ${item}`;
 </script>
 
 <Dialog.Root>
@@ -15,7 +16,7 @@
 		<Dialog.Header>
 			<Dialog.Title>New {item}</Dialog.Title>
 			<Dialog.Description>
-				Create a new {item}
+				{description}
 			</Dialog.Description>
 		</Dialog.Header>
 
