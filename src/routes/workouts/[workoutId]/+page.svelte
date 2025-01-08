@@ -3,24 +3,27 @@
 	import ExerciseInfoComponent from '$lib/hard-components/exercise-info.svelte';
 	import WorkoutInfoComponent from '$lib/hard-components/workout-info.svelte';
 	import NewItem from '$lib/hard-components/new-item.svelte';
-	import { type Exercise } from '$lib/types';
+	import { type Exercise, type WorkoutInfo } from '$lib/types';
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
+	import Input from '$lib/components/ui/input/input.svelte';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { fetchAuthSession } from '@aws-amplify/auth';
+	import { goto } from '$app/navigation';
 
 	export let data;
 
-	let { exercises, workoutInfo } = data;
+	let { exercises, workoutInfo, allExercises } = data;
+	let possibleExercises = [...allExercises];
 
-	const getPossibleExercises = async () => {
-		const session = await fetchAuthSession();
-		const response = await fetch(`/api/exercises?token=${session.tokens?.idToken?.toString()}`);
-		let possibleExercises: Exercise[] = await response.json();
-		possibleExercises = possibleExercises.filter(
-			(exercise: Exercise) => !exercises.find((e: Exercise) => e.objectId === exercise.objectId)
-		);
-		return possibleExercises;
-	};
+	$: possibleExercises = possibleExercises.filter(
+		(exercise: Exercise) => !exercises.find((e: Exercise) => e.objectId === exercise.objectId)
+	);
+
+	let search = '';
+
+	$: possibleExercises = allExercises.filter((exercise: Exercise) =>
+		exercise.name.toLowerCase().includes(search.toLowerCase())
+	);
 
 	const addExercise = async (exercise: Exercise) => {
 		console.log(`adding exercise: ${exercise.name}`);
@@ -50,16 +53,12 @@
 		console.log(`removing exercise: ${exercise.name}`);
 		const session = await fetchAuthSession();
 		const response = await fetch(
-			`/api/exercise-joins?token=${session.tokens?.idToken?.toString()}`,
+			`/api/exercise-joins?token=${session.tokens?.idToken?.toString()}&workout=${workoutInfo.objectId}&exercise=${exercise.objectId}`,
 			{
 				method: 'DELETE',
 				headers: {
 					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					workoutId: workoutInfo.objectId,
-					exerciseId: exercise.objectId
-				})
+				}
 			}
 		);
 
@@ -70,22 +69,43 @@
 			exercises = exercises;
 		}
 	};
+
+	async function deleteWorkout(workout: WorkoutInfo) {
+		console.log('deleting workout: ', workout);
+		const session = await fetchAuthSession();
+		const response = await fetch(
+			`/api/workouts/${workout.objectId}?token=${session.tokens?.idToken?.toString()}`,
+			{
+				method: 'DELETE'
+			}
+		);
+
+		if (!response.ok) {
+			console.error('Failed to delete workout: ', workout);
+		} else {
+			goto(`/workouts`);
+		}
+	}
 </script>
 
-<WorkoutInfoComponent workout={workoutInfo} brief />
+<WorkoutInfoComponent workout={workoutInfo} deletionCallback={deleteWorkout} />
 
 <NewItem item="Exercise" description={`Add exercise to '${workoutInfo.title}'`}>
-	{#await getPossibleExercises() then possibleExercises}
-		<ScrollArea>
-			{#each possibleExercises as possibleExercise}
-				<Dialog.Close class="w-full text-left" on:click={() => addExercise(possibleExercise)}>
-					<ExerciseInfoComponent exercise={possibleExercise} brief />
-				</Dialog.Close>
-			{/each}
-		</ScrollArea>
-	{/await}
+	<label for="Search">Search:</label>
+	<Input placeholder="Exercise Name" bind:value={search} />
+	<ScrollArea>
+		{#each possibleExercises as possibleExercise}
+			<Dialog.Close class="w-full text-left" on:click={() => addExercise(possibleExercise)}>
+				<ExerciseInfoComponent exercise={possibleExercise} brief />
+			</Dialog.Close>
+		{/each}
+	</ScrollArea>
 </NewItem>
 
 {#each exercises as exercise}
-	<ExerciseComponent {exercise} />
+	<ExerciseComponent
+		{exercise}
+		workoutId={workoutInfo.objectId}
+		deletionCallback={removeExercise}
+	/>
 {/each}

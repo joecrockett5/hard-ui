@@ -100,24 +100,6 @@
 			workouts = workouts;
 		}
 	}
-
-	async function deleteWorkout(workout: WorkoutInfo) {
-		console.log('deleting workout: ', workout);
-		const session = await fetchAuthSession();
-		const response = await fetch(
-			`/api/workouts/${workout.objectId}?token=${session.tokens?.idToken?.toString()}`,
-			{
-				method: 'DELETE'
-			}
-		);
-
-		if (!response.ok) {
-			console.error('Failed to delete workout: ', workout);
-		} else {
-			workouts = workouts.filter((e: WorkoutInfo) => e.objectId !== workout.objectId);
-			workouts = workouts;
-		}
-	}
 </script>
 
 <Calendar bind:value={$selectedDate} class="rounded-md border" />
@@ -146,10 +128,8 @@
 
 {#if workouts.length > 0}
 	{#each workouts as workout}
-		<WorkoutInfoComponent
-			{workout}
-			href="/workouts/{workout.objectId}"
-			deletionCallback={deleteWorkout}
-		/>
+		<a href="/workouts/{workout.objectId}">
+			<WorkoutInfoComponent {workout} brief />
+		</a>
 	{/each}
 {/if}

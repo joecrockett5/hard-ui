@@ -66,7 +66,6 @@
 			</Dialog.Content>
 		</Dialog.Root>
 	{/if}
-	<!-- TODO: Add Edit button -->
 	<Card.Header>
 		<Card.Title>{exercise.name}</Card.Title>
 		<Card.Description>{exercise.description}</Card.Description>

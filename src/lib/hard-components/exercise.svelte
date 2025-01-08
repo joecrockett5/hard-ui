@@ -5,12 +5,15 @@
 	import type { Exercise, Set } from '$lib/types';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { buttonVariants } from '$lib/components/ui/button';
+	import { fetchAuthSession } from 'aws-amplify/auth';
+	import Input from '$lib/components/ui/input/input.svelte';
 
 	export let exercise: Exercise;
+	export let workoutId: string;
 	export let deletionCallback: (exercise: Exercise) => void;
 
-	const warmupSets: Set[] = [];
-	const workingSets: Set[] = [];
+	let warmupSets: Set[] = [];
+	let workingSets: Set[] = [];
 
 	if (exercise.sets && exercise.sets.length > 0) {
 		exercise.sets.forEach((set) => {
@@ -20,6 +23,56 @@
 				workingSets.push(set);
 			}
 		});
+	}
+
+	let warmupSetWeight = undefined;
+	let warmupSetReps = undefined;
+	let warmupSetNotes = '';
+
+	let workingSetWeight = 0;
+	let workingSetReps = 0;
+	let workingSetNotes = '';
+
+	async function createWarmupSet() {
+		const session = await fetchAuthSession();
+		const response = await fetch(
+			`/api/exercise-joins?token=${session.tokens?.idToken?.toString()}&workout=${workoutId}&exercise=${exercise.objectId}`
+		);
+		const joinJson = await response.json();
+		const join = joinJson[0];
+		console.log(join);
+		const createSetResponse = await fetch(
+			`/api/sets?token=${session.tokens?.idToken?.toString()}`,
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					setType: 'warmup',
+					weight: warmupSetWeight,
+					weightUnit: 'kg',
+					reps: warmupSetReps,
+					notes: warmupSetNotes,
+					exerciseJoinId: join.objectId
+				})
+			}
+		);
+		if (createSetResponse.ok) {
+			const set = await createSetResponse.json();
+			warmupSets.push(set);
+			warmupSets = warmupSets;
+
+			warmupSetWeight = 0;
+			warmupSetReps = 0;
+			warmupSetNotes = '';
+		} else {
+			console.log('Error creating warmup set');
+		}
+	}
+
+	async function createWorkingSet() {
+		// TODO: Create a new set
 	}
 </script>
 
@@ -35,8 +88,9 @@
 			</Dialog.Header>
 			<Dialog.Footer>
 				<Dialog.Close class={buttonVariants({ variant: 'ghost' })}>Cancel</Dialog.Close>
-				<Dialog.Close on:click={deletionCallback} class={buttonVariants({ variant: 'destructive' })}
-					>Remove</Dialog.Close
+				<Dialog.Close
+					on:click={() => deletionCallback(exercise)}
+					class={buttonVariants({ variant: 'destructive' })}>Remove</Dialog.Close
 				>
 			</Dialog.Footer>
 		</Dialog.Content>
@@ -49,7 +103,6 @@
 			<Card.Description>{exercise.description}</Card.Description>
 		{/if}
 	</Card.Header>
-	<!-- TODO: Add Edit button -->
 	<Card.Content>
 		<div>
 			{#if exercise.tags}
@@ -67,7 +120,14 @@
 				<SetComponent {set} />
 			{/each}
 			<NewItem item="Warmup Set">
-				<!-- TODO: Add NewItem form -->
+				<Input placeholder="Reps" type="number" bind:value={warmupSetReps} />
+				<Input placeholder="Weight (Kg)" type="number" bind:value={warmupSetWeight} />
+				<Input placeholder="Notes" bind:value={warmupSetNotes} />
+				<Dialog.Footer>
+					<Dialog.Close class={buttonVariants({ variant: 'default' })} on:click={createWarmupSet}
+						>Add</Dialog.Close
+					>
+				</Dialog.Footer>
 			</NewItem>
 		</div>
 		<div class="mt-6">

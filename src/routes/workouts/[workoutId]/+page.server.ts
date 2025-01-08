@@ -18,6 +18,9 @@ export const load = (async ({ fetch, cookies, params }) => {
 	);
 	const exercises: Exercise[] = await exercisesResponse.json();
 
+	const possibilitiesResponse = await fetch(`/api/exercises?token=${idToken}`);
+	const allExercises: Exercise[] = await possibilitiesResponse.json();
+
 	console.log(`workout: ${workoutInfo.title}, found ${exercises.length} exercises`);
 
 	for (const exercise of exercises) {
@@ -30,6 +33,7 @@ export const load = (async ({ fetch, cookies, params }) => {
 
 	return {
 		workoutInfo,
-		exercises
+		exercises,
+		allExercises
 	};
 }) satisfies PageLoad;
