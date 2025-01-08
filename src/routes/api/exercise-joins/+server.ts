@@ -73,7 +73,7 @@ export const DELETE: RequestHandler = async ({ url, request }) => {
 		return new Response('Unauthorized', { status: 401 });
 	}
 	const response = await fetch(
-		`${HARD_API}/exercise-joins?workout_id=${workoutId}&exercise_id=${exerciseId}`,
+		`${HARD_API}/exercise-joins?workout=${workoutId}&exercise=${exerciseId}`,
 		{
 			method: 'DELETE',
 			headers: { Authorization: `Bearer ${token}` }

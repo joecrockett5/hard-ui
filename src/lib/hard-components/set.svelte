@@ -1,44 +1,83 @@
 <script lang="ts">
 	import * as Accordion from '$lib/components/ui/accordion/index.js';
-	import { Button } from '$lib/components/ui/button/index.js';
+	import * as Dialog from '$lib/components/ui/dialog';
+	import * as Card from '$lib/components/ui/card';
+	import Input from '$lib/components/ui/input/input.svelte';
+	import { buttonVariants } from '$lib/components/ui/button';
 	import type { Set } from '$lib/types';
+	import { fetchAuthSession } from '@aws-amplify/auth';
+	import ConfirmDelete from '$lib/hard-components/confirm-delete-set.svelte';
 
 	export let set: Set;
+	export let deletionCallback: (set: Set) => void;
+
+	let updatedWeight = set.weight;
+	let updatedReps = set.reps;
+	let updatedNotes = set.notes;
+
+	async function updateSet() {
+		const session = await fetchAuthSession();
+		const response = await fetch(
+			`/api/sets/${set.objectId}?token=${session.tokens?.idToken?.toString()}`,
+			{
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					timestamp: set.timestamp,
+					objectId: set.objectId,
+					setType: set.setType,
+					weight: updatedWeight,
+					weightUnit: set.weightUnit,
+					reps: updatedReps,
+					notes: updatedNotes,
+					exerciseJoinId: set.exerciseJoinId
+				})
+			}
+		);
+
+		if (!response.ok) {
+			console.error('Failed to update set: ', set);
+		} else {
+			set.weight = updatedWeight;
+			set.reps = updatedReps;
+			set.notes = updatedNotes;
+		}
+	}
 </script>
 
-<Accordion.Root class="w-full ">
-	<Accordion.Item value="item-1">
-		<Accordion.Trigger>{set.weight} {set.weightUnit}: {set.reps} reps</Accordion.Trigger>
-		<Accordion.Content>
-			<div>
-				<Button class="float-right top-4 right-4" variant="ghost">Edit</Button>
-				<!-- TODO: Add Edit button -->
-				<div class="flex flex-col gap-4">
-					{#if set.tags}
-						{#each set.tags as tag}
-							<div class="flex gap-2 items-center">
-								<span
-									class="rounded-full w-4 h-4 bg-gray-200"
-									style="background-color: {tag.color}"
-								/>
-								<span>{tag.name}</span>
-							</div>
-						{/each}
-					{/if}
-				</div>
-			</div>
+<Card.Root class="w-full mt-2">
+	<div class="m-2">
+		<div class="flex justify-between items-center">
+			<p class="ml-4">{set.reps} reps @ {set.weight} {set.weightUnit}</p>
 
-			<br />
-			<br />
-
-			<h1 class="text-xl font-bold">Notes</h1>
-			<p>{set.notes}</p>
-
-			<br />
-			<br />
-
-			<h1 class="text-xl font-bold">Comparison</h1>
-			<p>{set.comparison}</p>
-		</Accordion.Content>
-	</Accordion.Item>
-</Accordion.Root>
+			<Dialog.Root>
+				<Dialog.Trigger class={`ml-auto ${buttonVariants({ variant: 'ghost' })}`}
+					>Edit</Dialog.Trigger
+				>
+				<Dialog.Content class="w-3/4 max-w-lg">
+					<Dialog.Header>
+						<Dialog.Title>Edit Set</Dialog.Title>
+					</Dialog.Header>
+					<label for="weight">Weight</label>
+					<Input type="number" bind:value={updatedWeight} />
+					<label for="reps">Reps</label>
+					<Input type="number" bind:value={updatedReps} />
+					<label for="Notes">Notes</label>
+					<Input placeholder="Notes for the set" bind:value={updatedNotes} />
+					<br />
+					<Dialog.Footer>
+						<ConfirmDelete {deletionCallback} {set} />
+						<Dialog.Close class={buttonVariants({ variant: 'default' })} on:click={updateSet}
+							>Save</Dialog.Close
+						>
+					</Dialog.Footer>
+				</Dialog.Content>
+			</Dialog.Root>
+		</div>
+		{#if set.notes}
+			<p class="ml-4 mb-4"><b>Notes:</b> {set.notes}</p>
+		{/if}
+	</div>
+</Card.Root>

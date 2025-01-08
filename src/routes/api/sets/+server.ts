@@ -20,8 +20,8 @@ export const GET: RequestHandler = async ({ url }) => {
 	}
 	const response = await fetch(
 		`${HARD_API}/sets` +
-			(workoutId ? '?workout_id=' + workoutId : '') +
-			(exerciseId ? '&exercise_id=' + exerciseId : ''),
+			(workoutId ? '?workout=' + workoutId : '') +
+			(exerciseId ? '&exercise=' + exerciseId : ''),
 		{
 			headers: { Authorization: `Bearer ${token}` }
 		}

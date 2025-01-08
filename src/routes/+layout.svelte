@@ -60,19 +60,24 @@
 			</Sheet.Trigger>
 			<Sheet.Content side="bottom">
 				<Sheet.Header>
-					<Sheet.Title><a href="/">Hard</a></Sheet.Title>
-					<Sheet.Description>lorem ipsum dolor sit amet, consectetur adipiscing</Sheet.Description>
+					<Sheet.Close>
+						<Sheet.Title><a href="/">Hard</a></Sheet.Title>
+						<Sheet.Description>lorem ipsum dolor sit amet, consectetur adipiscing</Sheet.Description
+						>
+					</Sheet.Close>
 				</Sheet.Header>
-				<div class="grid gap-2 py-4">
-					<div class="grid grid-cols-2 items-center gap-4">
-						<Button href="/workouts" variant="secondary">Workouts</Button>
-						<Button href="/exercises" variant="secondary">Exercises</Button>
+				<Sheet.Close class="w-full">
+					<div class="grid gap-2 py-4">
+						<div class="grid grid-cols-2 items-center gap-4">
+							<Button href="/workouts" variant="secondary">Workouts</Button>
+							<Button href="/exercises" variant="secondary">Exercises</Button>
+						</div>
+						<div class="grid grid-cols-2 items-center gap-4">
+							<Button href="/tags" variant="secondary">Tags</Button>
+							<Button href="/meso-cycles" variant="secondary">Meso Cycles</Button>
+						</div>
 					</div>
-					<div class="grid grid-cols-2 items-center gap-4">
-						<Button href="/tags" variant="secondary">Tags</Button>
-						<Button href="/meso-cycles" variant="secondary">Meso Cycles</Button>
-					</div>
-				</div>
+				</Sheet.Close>
 			</Sheet.Content>
 		</Sheet.Root>
 

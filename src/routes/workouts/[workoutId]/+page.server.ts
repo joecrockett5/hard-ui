@@ -28,6 +28,9 @@ export const load = (async ({ fetch, cookies, params }) => {
 			`/api/sets?workout=${workoutInfo.objectId}&exercise=${exercise.objectId}&token=${idToken}`
 		);
 		const sets: Set[] = await setsResponse.json();
+		console.log(
+			`found ${sets.length} sets for ${exercise.name} from /api/sets?workout=${workoutInfo.objectId}&exercise=${exercise.objectId}`
+		);
 		exercise.sets = sets;
 	}
 

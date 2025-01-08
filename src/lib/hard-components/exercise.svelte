@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import * as Card from '$lib/components/ui/card';
 	import SetComponent from '$lib/hard-components/set.svelte';
 	import NewItem from '$lib/hard-components/new-item.svelte';
@@ -29,8 +30,8 @@
 	let warmupSetReps = undefined;
 	let warmupSetNotes = '';
 
-	let workingSetWeight = 0;
-	let workingSetReps = 0;
+	let workingSetWeight = undefined;
+	let workingSetReps = undefined;
 	let workingSetNotes = '';
 
 	async function createWarmupSet() {
@@ -72,7 +73,62 @@
 	}
 
 	async function createWorkingSet() {
-		// TODO: Create a new set
+		const session = await fetchAuthSession();
+		const response = await fetch(
+			`/api/exercise-joins?token=${session.tokens?.idToken?.toString()}&workout=${workoutId}&exercise=${exercise.objectId}`
+		);
+		const joinJson = await response.json();
+		const join = joinJson[0];
+		console.log(join);
+		const createSetResponse = await fetch(
+			`/api/sets?token=${session.tokens?.idToken?.toString()}`,
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					setType: 'working',
+					weight: workingSetWeight,
+					weightUnit: 'kg',
+					reps: workingSetReps,
+					notes: workingSetNotes,
+					exerciseJoinId: join.objectId
+				})
+			}
+		);
+		if (createSetResponse.ok) {
+			const set = await createSetResponse.json();
+			workingSets.push(set);
+			workingSets = workingSets;
+
+			workingSetWeight = 0;
+			workingSetReps = 0;
+			workingSetNotes = '';
+		} else {
+			console.log('Error creating working set');
+		}
+	}
+
+	async function deleteSet(set: Set) {
+		const session = await fetchAuthSession();
+		const response = await fetch(
+			`/api/sets/${set.objectId}?token=${session.tokens?.idToken?.toString()}`,
+			{
+				method: 'DELETE'
+			}
+		);
+
+		if (!response.ok) {
+			console.error('Failed to delete set: ', set);
+		} else {
+			if (set.setType === 'warmup') {
+				warmupSets = warmupSets.filter((s: Set) => s.objectId !== set.objectId);
+			} else {
+				workingSets = workingSets.filter((s: Set) => s.objectId !== set.objectId);
+			}
+			goto(`/workouts/${workoutId}`);
+		}
 	}
 </script>
 
@@ -117,7 +173,7 @@
 		<div class="mt-6">
 			<h3 class="text-xl font-bold">Warmup Sets</h3>
 			{#each warmupSets as set}
-				<SetComponent {set} />
+				<SetComponent {set} deletionCallback={deleteSet} />
 			{/each}
 			<NewItem item="Warmup Set">
 				<Input placeholder="Reps" type="number" bind:value={warmupSetReps} />
@@ -133,10 +189,17 @@
 		<div class="mt-6">
 			<h3 class="text-xl font-bold">Working Sets</h3>
 			{#each workingSets as set}
-				<SetComponent {set} />
+				<SetComponent {set} deletionCallback={deleteSet} />
 			{/each}
 			<NewItem item="Working Set">
-				<!-- TODO: Add NewItem form -->
+				<Input placeholder="Reps" type="number" bind:value={workingSetReps} />
+				<Input placeholder="Weight (Kg)" type="number" bind:value={workingSetWeight} />
+				<Input placeholder="Notes" bind:value={workingSetNotes} />
+				<Dialog.Footer>
+					<Dialog.Close class={buttonVariants({ variant: 'default' })} on:click={createWorkingSet}
+						>Add</Dialog.Close
+					>
+				</Dialog.Footer>
 			</NewItem>
 		</div>
 	</Card.Content>
