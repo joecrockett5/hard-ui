@@ -43,6 +43,7 @@
 		"clsx": "^2.1.1",
 		"dotenv": "^16.4.5",
 		"lucide-svelte": "^0.436.0",
+		"svelte-gestures": "^5.0.7",
 		"tailwind-merge": "^2.4.0",
 		"tailwind-variants": "^0.2.1"
 	}

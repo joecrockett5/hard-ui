@@ -71,6 +71,7 @@ export const DELETE: RequestHandler = async ({ url, params }) => {
 		method: 'DELETE',
 		headers: { Authorization: `Bearer ${token}` }
 	});
+	console.log(response.status);
 	// const failedTags = await deleteTags(token, tags);
 	// console.log(`failed tags: ${failedTags}`);
 	return response;

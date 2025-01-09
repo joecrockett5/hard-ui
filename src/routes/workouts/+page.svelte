@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { swipe } from 'svelte-gestures';
 	import { getLocalTimeZone, today } from '@internationalized/date';
 	import { Calendar } from '$lib/components/ui/calendar/index.js';
 	import * as Card from '$lib/components/ui/card/index.js';
@@ -100,6 +101,20 @@
 			workouts = workouts;
 		}
 	}
+
+	let direction;
+
+	function handleSwipe(e) {
+		direction = e.detail.direction;
+		switch (direction) {
+			case 'left':
+				$selectedDate = $selectedDate.add({ days: 1 });
+				break;
+			case 'right':
+				$selectedDate = $selectedDate.subtract({ days: 1 });
+				break;
+		}
+	}
 </script>
 
 <Calendar bind:value={$selectedDate} class="rounded-md border" />
@@ -126,10 +141,16 @@
 	</Dialog.Footer>
 </NewItem>
 
-{#if workouts.length > 0}
-	{#each workouts as workout}
-		<a href="/workouts/{workout.objectId}">
-			<WorkoutInfoComponent {workout} brief />
-		</a>
-	{/each}
-{/if}
+<div
+	use:swipe={{ timeframe: 300, minSwipeDistance: 10, touchAction: 'pan-y' }}
+	on:swipe={handleSwipe}
+	class="h-screen"
+>
+	{#if workouts.length > 0}
+		{#each workouts as workout}
+			<a href="/workouts/{workout.objectId}">
+				<WorkoutInfoComponent {workout} brief />
+			</a>
+		{/each}
+	{/if}
+</div>
