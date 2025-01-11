@@ -1,6 +1,7 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import { swipe } from 'svelte-gestures';
-	import { getLocalTimeZone, today } from '@internationalized/date';
+	import { getLocalTimeZone, today, parseDate } from '@internationalized/date';
 	import { Calendar } from '$lib/components/ui/calendar/index.js';
 	import * as Card from '$lib/components/ui/card/index.js';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
@@ -12,8 +13,14 @@
 	import NewItem from '$lib/hard-components/new-item.svelte';
 	import { fetchAuthSession } from 'aws-amplify/auth';
 
+	let customDate = $page.url.searchParams.get('date');
+
 	let workouts: WorkoutInfo[] = [];
 	let selectedDate = writable(today(getLocalTimeZone()));
+
+	if (customDate) {
+		selectedDate.set(parseDate(customDate));
+	}
 
 	const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 	const months = [

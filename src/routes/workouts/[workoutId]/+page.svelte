@@ -83,7 +83,7 @@
 		if (!response.ok) {
 			console.error('Failed to delete workout: ', workout);
 		} else {
-			goto(`/workouts`);
+			goto(`/workouts?date=${workout.workoutDate}`);
 		}
 	}
 </script>
