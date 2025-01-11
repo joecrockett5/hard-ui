@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { WorkoutInfo } from '$lib/types';
 	import * as Card from '$lib/components/ui/card';
-	import { buttonVariants } from '$lib/components/ui/button';
+	import { buttonVariants, Button } from '$lib/components/ui/button';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import { fetchAuthSession } from '@aws-amplify/auth';
@@ -69,6 +69,11 @@
 				</Dialog.Footer>
 			</Dialog.Content>
 		</Dialog.Root>
+		<Button
+			variant="ghost"
+			class="float-right top-4 right-4"
+			href={`/workouts?date=${workout.workoutDate}`}>⤶</Button
+		>
 	{/if}
 	<Card.Header>
 		<Card.Title>
