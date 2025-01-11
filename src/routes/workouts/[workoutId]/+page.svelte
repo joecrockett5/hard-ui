@@ -53,7 +53,7 @@
 		console.log(`removing exercise: ${exercise.name}`);
 		const session = await fetchAuthSession();
 		const response = await fetch(
-			`/api/exercise-joins?token=${session.tokens?.idToken?.toString()}&workout=${workoutInfo.objectId}&exercise=${exercise.objectId}`,
+			`/api/exercise-joins?token=${session.tokens?.idToken?.toString()}&workoutId=${workoutInfo.objectId}&exerciseId=${exercise.objectId}`,
 			{
 				method: 'DELETE',
 				headers: {

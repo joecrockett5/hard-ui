@@ -12,7 +12,7 @@
 		<Plus />
 		Add {item}
 	</Dialog.Trigger>
-	<Dialog.Content class="w-3/4 max-w-lg">
+	<Dialog.Content class="w-3/4 max-w-lg h-3/4">
 		<Dialog.Header>
 			<Dialog.Title>New {item}</Dialog.Title>
 			<Dialog.Description>
