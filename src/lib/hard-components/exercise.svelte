@@ -176,8 +176,10 @@
 				<SetComponent {set} deletionCallback={deleteSet} />
 			{/each}
 			<NewItem item="Warmup Set">
-				<Input placeholder="Reps" type="number" bind:value={warmupSetReps} />
-				<Input placeholder="Weight (Kg)" type="number" bind:value={warmupSetWeight} />
+				<span class="flex gap-2 items-center">
+					<Input placeholder="Reps" type="number" bind:value={warmupSetReps} class="w-20" /> reps @
+					<Input placeholder="Weight" type="number" bind:value={warmupSetWeight} class="w-24" /> kg
+				</span>
 				<Input placeholder="Notes" bind:value={warmupSetNotes} />
 				<Dialog.Footer>
 					<Dialog.Close class={buttonVariants({ variant: 'default' })} on:click={createWarmupSet}

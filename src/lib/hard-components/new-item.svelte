@@ -5,7 +5,7 @@
 
 	export let item: string = 'Item';
 	export let description: string = `Create a new ${item}`;
-	export let className: string;
+	export let className: string = '';
 </script>
 
 <Dialog.Root>
