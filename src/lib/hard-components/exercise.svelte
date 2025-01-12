@@ -64,8 +64,8 @@
 			warmupSets.push(set);
 			warmupSets = warmupSets;
 
-			warmupSetWeight = 0;
-			warmupSetReps = 0;
+			warmupSetWeight = undefined;
+			warmupSetReps = undefined;
 			warmupSetNotes = '';
 		} else {
 			console.log('Error creating warmup set');
@@ -102,8 +102,8 @@
 			workingSets.push(set);
 			workingSets = workingSets;
 
-			workingSetWeight = 0;
-			workingSetReps = 0;
+			// workingSetWeight = 0;
+			workingSetReps = undefined;
 			workingSetNotes = '';
 		} else {
 			console.log('Error creating working set');

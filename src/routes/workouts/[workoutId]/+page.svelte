@@ -90,9 +90,11 @@
 
 <WorkoutInfoComponent workout={workoutInfo} deletionCallback={deleteWorkout} />
 
-<NewItem item="Exercise" description={`Add exercise to '${workoutInfo.title}'`}>
-	<label for="Search">Search:</label>
-	<Input placeholder="Exercise Name" bind:value={search} />
+<NewItem item="Exercise" description={`Add exercise to '${workoutInfo.title}'`} className="h-3/4">
+	<div class="self-start">
+		<label for="Search" class="text-left">Search:</label>
+		<Input placeholder="Exercise Name" bind:value={search} />
+	</div>
 	<ScrollArea>
 		{#each possibleExercises as possibleExercise}
 			<Dialog.Close class="w-full text-left" on:click={() => addExercise(possibleExercise)}>

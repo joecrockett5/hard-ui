@@ -5,6 +5,7 @@
 
 	export let item: string = 'Item';
 	export let description: string = `Create a new ${item}`;
+	export let className: string;
 </script>
 
 <Dialog.Root>
@@ -12,7 +13,7 @@
 		<Plus />
 		Add {item}
 	</Dialog.Trigger>
-	<Dialog.Content class="w-3/4 max-w-lg h-3/4">
+	<Dialog.Content class={className + ' w-3/4 max-w-lg'}>
 		<Dialog.Header>
 			<Dialog.Title>New {item}</Dialog.Title>
 			<Dialog.Description>
