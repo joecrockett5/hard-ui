@@ -21,9 +21,11 @@
 
 	let search = '';
 
-	$: possibleExercises = allExercises.filter((exercise: Exercise) =>
-		exercise.name.toLowerCase().includes(search.toLowerCase())
-	);
+	$: possibleExercises = allExercises
+		.filter((exercise: Exercise) => exercise.name.toLowerCase().includes(search.toLowerCase()))
+		.filter(
+			(exercise: Exercise) => !exercises.find((e: Exercise) => e.objectId === exercise.objectId)
+		);
 
 	const addExercise = async (exercise: Exercise) => {
 		console.log(`adding exercise: ${exercise.name}`);
