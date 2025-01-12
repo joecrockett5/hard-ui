@@ -46,6 +46,7 @@
 		} else {
 			exercises.push(exercise);
 			exercises = exercises;
+			search = '';
 		}
 	};
 
