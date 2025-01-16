@@ -57,10 +57,11 @@
 				<label for="description">Description</label>
 				<Input placeholder="Description of the exercise" bind:value={updatedDescription} />
 				<br />
-				<Dialog.Footer>
-					<ConfirmDelete {exercise} {deletionCallback} />
-					<Dialog.Close class={buttonVariants({ variant: 'default' })} on:click={updateExercise}
-						>Save</Dialog.Close
+				<Dialog.Footer class="flex flex-row gap-2">
+					<ConfirmDelete {deletionCallback} {exercise} />
+					<Dialog.Close
+						class={buttonVariants({ variant: 'default' }) + ' ml-auto'}
+						on:click={updateExercise}>Save</Dialog.Close
 					>
 				</Dialog.Footer>
 			</Dialog.Content>
