@@ -9,6 +9,8 @@
 	import { buttonVariants } from '$lib/components/ui/button';
 	import { fetchAuthSession } from 'aws-amplify/auth';
 	import Input from '$lib/components/ui/input/input.svelte';
+	import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte';
+	import { writable } from 'svelte/store';
 
 	export let exercise: Exercise;
 	export let workoutId: string;
@@ -41,6 +43,9 @@
 		}
 	}
 
+	const creatingWarmupSet = writable(false);
+	const creatingWorkingSet = writable(false);
+
 	async function createWarmupSet() {
 		const session = await fetchAuthSession();
 		const response = await fetch(
@@ -48,6 +53,7 @@
 		);
 		const joinJson = await response.json();
 		const join = joinJson[0];
+		creatingWarmupSet.set(true);
 		const createSetResponse = await fetch(
 			`/api/sets?token=${session.tokens?.idToken?.toString()}`,
 			{
@@ -65,6 +71,7 @@
 				})
 			}
 		);
+		creatingWarmupSet.set(false);
 		if (createSetResponse.ok) {
 			const set = await createSetResponse.json();
 			warmupSets.push(set);
@@ -85,6 +92,7 @@
 		);
 		const joinJson = await response.json();
 		const join = joinJson[0];
+		creatingWorkingSet.set(true);
 		const createSetResponse = await fetch(
 			`/api/sets?token=${session.tokens?.idToken?.toString()}`,
 			{
@@ -102,6 +110,7 @@
 				})
 			}
 		);
+		creatingWorkingSet.set(false);
 		if (createSetResponse.ok) {
 			const set = await createSetResponse.json();
 			workingSets.push(set);
@@ -180,6 +189,9 @@
 			{#each warmupSets as set}
 				<SetComponent {set} deletionCallback={deleteSet} />
 			{/each}
+			{#if $creatingWarmupSet}
+				<Skeleton class="h-14 w-full mt-2" />
+			{/if}
 			<NewItem item="Warmup Set">
 				<InlineSetEdit
 					bind:reps={warmupSetReps}
@@ -198,6 +210,9 @@
 			{#each workingSets as set}
 				<SetComponent {set} deletionCallback={deleteSet} />
 			{/each}
+			{#if $creatingWorkingSet}
+				<Skeleton class="h-14 w-full mt-2" />
+			{/if}
 			<NewItem item="Working Set">
 				<InlineSetEdit
 					bind:reps={workingSetReps}
