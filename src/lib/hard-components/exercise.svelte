@@ -151,7 +151,7 @@
 		<Dialog.Trigger class={`float-right top-4 right-4 ${buttonVariants({ variant: 'ghost' })}`}
 			>Remove</Dialog.Trigger
 		>
-		<Dialog.Content class="max-w-lg">
+		<Dialog.Content class="w-3/4">
 			<Dialog.Header>
 				<Dialog.Title>Are you sure you want to remove this exercise?</Dialog.Title>
 				<Dialog.Description>This cannot be undone.</Dialog.Description>
