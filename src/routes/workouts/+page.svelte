@@ -57,19 +57,16 @@
 	$: longDate = `${weekdays[asDate.getDay()]}, ${asDate.getDate()}${nthNumber(asDate.getDate())} ${months[asDate.getMonth()]} ${asDate.getFullYear()}`;
 
 	async function loadDate(date) {
-		console.log('Loading date: ', date.toString().split('T')[0]);
 		const session = await fetchAuthSession();
 		const response = await fetch(
 			`/api/workouts?token=${session.tokens?.idToken?.toString()}&date=${date.toString().split('T')[0]}`
 		);
 		const workoutsForDate = await response.json();
-		console.log(`Found ${workoutsForDate.length} workouts`);
 		return workoutsForDate;
 	}
 
 	selectedDate.subscribe(async (date) => {
 		workouts = await loadDate(date);
-		console.log(workouts);
 		workouts = workouts;
 	});
 

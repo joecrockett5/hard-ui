@@ -34,8 +34,6 @@
 			});
 			if (!response.ok) {
 				console.log(`Unable to create exercise '${newExerciseName}'`);
-				const text = await response.text();
-				console.log(text);
 			}
 			newExerciseName = '';
 			newExerciseDescription = '';
@@ -58,7 +56,6 @@
 	}
 
 	async function deleteExercise(exercise: Exercise) {
-		console.log('deleting exercise: ', exercise);
 		const session = await fetchAuthSession();
 		const response = await fetch(
 			`/api/exercises/${exercise.objectId}?token=${session.tokens?.idToken?.toString()}`,

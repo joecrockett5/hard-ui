@@ -48,7 +48,6 @@
 		);
 		const joinJson = await response.json();
 		const join = joinJson[0];
-		console.log(join);
 		const createSetResponse = await fetch(
 			`/api/sets?token=${session.tokens?.idToken?.toString()}`,
 			{
@@ -86,7 +85,6 @@
 		);
 		const joinJson = await response.json();
 		const join = joinJson[0];
-		console.log(join);
 		const createSetResponse = await fetch(
 			`/api/sets?token=${session.tokens?.idToken?.toString()}`,
 			{

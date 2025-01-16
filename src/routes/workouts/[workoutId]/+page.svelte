@@ -53,7 +53,6 @@
 	};
 
 	const removeExercise = async (exercise: Exercise) => {
-		console.log(`removing exercise: ${exercise.name}`);
 		const session = await fetchAuthSession();
 		const response = await fetch(
 			`/api/exercise-joins?token=${session.tokens?.idToken?.toString()}&workoutId=${workoutInfo.objectId}&exerciseId=${exercise.objectId}`,
@@ -74,7 +73,6 @@
 	};
 
 	async function deleteWorkout(workout: WorkoutInfo) {
-		console.log('deleting workout: ', workout);
 		const session = await fetchAuthSession();
 		const response = await fetch(
 			`/api/workouts/${workout.objectId}?token=${session.tokens?.idToken?.toString()}`,

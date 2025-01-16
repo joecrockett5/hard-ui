@@ -62,7 +62,6 @@ export const POST: RequestHandler = async ({ url, request }) => {
 		notes: json.notes,
 		exercise_join_id: json.exerciseJoinId
 	};
-	console.log(formattedBody);
 	const response = await fetch(`${HARD_API}/sets`, {
 		method: 'POST',
 		headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
