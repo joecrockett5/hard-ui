@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import * as Card from '$lib/components/ui/card';
 	import SetComponent from '$lib/hard-components/set.svelte';
+	import InlineSetEdit from '$lib/hard-components/inline-set-edit.svelte';
 	import NewItem from '$lib/hard-components/new-item.svelte';
 	import type { Exercise, Set } from '$lib/types';
 	import * as Dialog from '$lib/components/ui/dialog';
@@ -176,11 +177,11 @@
 				<SetComponent {set} deletionCallback={deleteSet} />
 			{/each}
 			<NewItem item="Warmup Set">
-				<span class="flex gap-2 items-center">
-					<Input placeholder="Reps" type="number" bind:value={warmupSetReps} class="w-20" /> reps @
-					<Input placeholder="Weight" type="number" bind:value={warmupSetWeight} class="w-24" /> kg
-				</span>
-				<Input placeholder="Notes" bind:value={warmupSetNotes} />
+				<InlineSetEdit
+					bind:reps={warmupSetReps}
+					bind:weight={warmupSetWeight}
+					bind:notes={warmupSetNotes}
+				/>
 				<Dialog.Footer>
 					<Dialog.Close class={buttonVariants({ variant: 'default' })} on:click={createWarmupSet}
 						>Add</Dialog.Close
@@ -194,9 +195,11 @@
 				<SetComponent {set} deletionCallback={deleteSet} />
 			{/each}
 			<NewItem item="Working Set">
-				<Input placeholder="Reps" type="number" bind:value={workingSetReps} />
-				<Input placeholder="Weight (Kg)" type="number" bind:value={workingSetWeight} />
-				<Input placeholder="Notes" bind:value={workingSetNotes} />
+				<InlineSetEdit
+					bind:reps={workingSetReps}
+					bind:weight={workingSetWeight}
+					bind:notes={workingSetNotes}
+				/>
 				<Dialog.Footer>
 					<Dialog.Close class={buttonVariants({ variant: 'default' })} on:click={createWorkingSet}
 						>Add</Dialog.Close

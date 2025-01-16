@@ -1,5 +1,5 @@
 <script lang="ts">
-	import * as Accordion from '$lib/components/ui/accordion/index.js';
+	import InlineSetEdit from '$lib/hard-components/inline-set-edit.svelte';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import * as Card from '$lib/components/ui/card';
 	import Input from '$lib/components/ui/input/input.svelte';
@@ -60,17 +60,17 @@
 					<Dialog.Header>
 						<Dialog.Title>Edit Set</Dialog.Title>
 					</Dialog.Header>
-					<label for="weight">Weight</label>
-					<Input type="number" bind:value={updatedWeight} />
-					<label for="reps">Reps</label>
-					<Input type="number" bind:value={updatedReps} />
-					<label for="Notes">Notes</label>
-					<Input placeholder="Notes for the set" bind:value={updatedNotes} />
+					<InlineSetEdit
+						bind:reps={updatedReps}
+						bind:weight={updatedWeight}
+						bind:notes={updatedNotes}
+					/>
 					<br />
-					<Dialog.Footer>
+					<Dialog.Footer class="flex flex-row gap-2">
 						<ConfirmDelete {deletionCallback} {set} />
-						<Dialog.Close class={buttonVariants({ variant: 'default' })} on:click={updateSet}
-							>Save</Dialog.Close
+						<Dialog.Close
+							class={buttonVariants({ variant: 'default' }) + ' ml-auto'}
+							on:click={updateSet}>Save</Dialog.Close
 						>
 					</Dialog.Footer>
 				</Dialog.Content>

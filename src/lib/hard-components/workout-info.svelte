@@ -61,10 +61,11 @@
 				<label for="Notes">Notes</label>
 				<Input placeholder="notes for the workout" bind:value={updatedNotes} />
 				<br />
-				<Dialog.Footer>
+				<Dialog.Footer class="flex flex-row gap-2">
 					<ConfirmDelete {deletionCallback} {workout} />
-					<Dialog.Close class={buttonVariants({ variant: 'default' })} on:click={updateWorkout}
-						>Save</Dialog.Close
+					<Dialog.Close
+						class={buttonVariants({ variant: 'default' }) + ' ml-auto'}
+						on:click={updateWorkout}>Save</Dialog.Close
 					>
 				</Dialog.Footer>
 			</Dialog.Content>
