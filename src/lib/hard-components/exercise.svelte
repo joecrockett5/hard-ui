@@ -35,6 +35,12 @@
 	let workingSetReps = undefined;
 	let workingSetNotes = '';
 
+	$: {
+		if (workingSets.length > 0) {
+			workingSetWeight = workingSets.at(-1).weight;
+		}
+	}
+
 	async function createWarmupSet() {
 		const session = await fetchAuthSession();
 		const response = await fetch(
