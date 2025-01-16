@@ -1,6 +1,5 @@
 import { HARD_API } from '$env/static/private';
 import { type RequestHandler } from '@sveltejs/kit';
-import { getTags, putTags, deleteTags } from '$lib/tag-helpers';
 import { type Set } from '$lib/types';
 
 export const GET: RequestHandler = async ({ url, params }) => {
@@ -14,7 +13,6 @@ export const GET: RequestHandler = async ({ url, params }) => {
 	const response = await fetch(`${HARD_API}/sets/${setId}`, {
 		headers: { Authorization: `Bearer ${token}` }
 	});
-	// const tags = await getTags(token, setId);
 	const json = await response.json();
 	const formattedBody: Set = {
 		userId: json.user_id,
@@ -26,8 +24,7 @@ export const GET: RequestHandler = async ({ url, params }) => {
 		weightUnit: json.weight_unit,
 		reps: json.reps,
 		notes: json.notes,
-		exerciseJoinId: json.exercise_join_id,
-		tags: []
+		exerciseJoinId: json.exercise_join_id
 	};
 	return new Response(JSON.stringify(formattedBody), {
 		status: response.status
@@ -43,7 +40,6 @@ export const PUT: RequestHandler = async ({ url, params, request }) => {
 		return new Response('Unauthorized', { status: 401 });
 	}
 	const json = await request.json();
-	// const tags = json.tags;
 	const formattedBody = {
 		timestamp: json.timestamp,
 		object_id: json.objectId,
@@ -70,11 +66,8 @@ export const PUT: RequestHandler = async ({ url, params, request }) => {
 		weightUnit: returnJson.weight_unit,
 		reps: returnJson.reps,
 		notes: returnJson.notes,
-		exerciseJoinId: returnJson.exercise_join_id,
-		tags: []
+		exerciseJoinId: returnJson.exercise_join_id
 	};
-	// const failedTags = await putTags(token, tags);
-	// console.log(`failed tags: ${failedTags}`);
 	return new Response(JSON.stringify(returnFormattedBody), {
 		status: response.status
 	});
@@ -88,12 +81,9 @@ export const DELETE: RequestHandler = async ({ url, params }) => {
 		console.log('Missing token');
 		return new Response('Unauthorized', { status: 401 });
 	}
-	// const tags = await getTags(token, setId);
 	const response = await fetch(`${HARD_API}/sets/${setId}`, {
 		method: 'DELETE',
 		headers: { Authorization: `Bearer ${token}` }
 	});
-	// const failedTags = await deleteTags(token, tags);
-	// console.log(`failed tags: ${failedTags}`);
 	return response;
 };

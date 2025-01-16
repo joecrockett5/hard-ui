@@ -1,6 +1,5 @@
 import { HARD_API } from '$env/static/private';
 import { type RequestHandler } from '@sveltejs/kit';
-import { getTags, putTags, deleteTags } from '$lib/tag-helpers';
 import { type Exercise } from '$lib/types';
 
 export const GET: RequestHandler = async ({ url, params }) => {
@@ -15,8 +14,6 @@ export const GET: RequestHandler = async ({ url, params }) => {
 		headers: { Authorization: `Bearer ${token}` }
 	});
 	const exerciseJoin = await response.json();
-
-	const exerciseTags = await getTags(token, exerciseJoin.exercise_id);
 
 	const exerciseResponse = await fetch(`${HARD_API}/exercises/${exerciseJoin.exercise_id}`, {
 		headers: { Authorization: `Bearer ${token}` }

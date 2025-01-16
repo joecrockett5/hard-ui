@@ -1,6 +1,5 @@
 import { HARD_API } from '$env/static/private';
 import { type RequestHandler } from '@sveltejs/kit';
-import { getTags, putTags, deleteTags } from '$lib/tag-helpers';
 import { type Workout } from '$lib/types';
 
 export const GET: RequestHandler = async ({ url, params }) => {
@@ -14,7 +13,6 @@ export const GET: RequestHandler = async ({ url, params }) => {
 	const response = await fetch(`${HARD_API}/workouts/${workoutId}`, {
 		headers: { Authorization: `Bearer ${token}` }
 	});
-	// const tags = await getTags(token, workoutId);
 	const json = await response.json();
 	const formattedBody: Workout = {
 		userId: json.user_id,
@@ -23,8 +21,7 @@ export const GET: RequestHandler = async ({ url, params }) => {
 		objectId: json.object_id,
 		workoutDate: json.workout_date,
 		notes: json.notes,
-		title: json.title,
-		tags: []
+		title: json.title
 	};
 	return new Response(JSON.stringify(formattedBody), {
 		status: response.status,
@@ -53,8 +50,6 @@ export const PUT: RequestHandler = async ({ url, params, request }) => {
 		headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
 		body: JSON.stringify(formattedBody)
 	});
-	// const failedTags = await putTags(token, tags);
-	// console.log(`failed tags: ${failedTags}`);
 	return response;
 };
 
@@ -66,13 +61,10 @@ export const DELETE: RequestHandler = async ({ url, params }) => {
 		console.log('Missing token');
 		return new Response('Unauthorized', { status: 401 });
 	}
-	// const tags = await getTags(token, workoutId);
 	const response = await fetch(`${HARD_API}/workouts/${workoutId}`, {
 		method: 'DELETE',
 		headers: { Authorization: `Bearer ${token}` }
 	});
 	console.log(response.status);
-	// const failedTags = await deleteTags(token, tags);
-	// console.log(`failed tags: ${failedTags}`);
 	return response;
 };

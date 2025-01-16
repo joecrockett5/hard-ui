@@ -1,7 +1,6 @@
 import { HARD_API } from '$env/static/private';
 import { type RequestHandler } from '@sveltejs/kit';
 import { type Exercise } from '$lib/types';
-import { getTags, postTags } from '$lib/tag-helpers';
 
 export const GET: RequestHandler = async ({ url }) => {
 	// Need to update backend to allow for filtering by exercise_date
@@ -20,15 +19,13 @@ export const GET: RequestHandler = async ({ url }) => {
 	const rawexercises = await response.json();
 	const exercises: Exercise[] = [];
 	for (const exercise of rawexercises) {
-		const tags = await getTags(token, exercise.object_id);
 		exercises.push({
 			userId: exercise.user_id,
 			timestamp: exercise.timestamp,
 			objectType: exercise.object_type,
 			objectId: exercise.object_id,
 			name: exercise.name,
-			description: exercise.description ?? '',
-			tags
+			description: exercise.description ?? ''
 		});
 	}
 	return new Response(JSON.stringify(exercises), {
@@ -44,7 +41,6 @@ export const POST: RequestHandler = async ({ url, request }) => {
 		return new Response('Unauthorized', { status: 401 });
 	}
 	const json = await request.json();
-	const tags = json.tags;
 	const formattedBody = {
 		name: json.name,
 		description: json.description
@@ -54,9 +50,5 @@ export const POST: RequestHandler = async ({ url, request }) => {
 		headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
 		body: JSON.stringify(formattedBody)
 	});
-	console.log(`status: ${response.status}`);
-	console.log(`body: ${response.body}`);
-	// const failedTags = await postTags(token, json.objectId, tags);
-	// console.log(`failed tags: ${failedTags}`);
 	return response;
 };

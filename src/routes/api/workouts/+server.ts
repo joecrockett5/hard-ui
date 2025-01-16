@@ -1,7 +1,6 @@
 import { HARD_API } from '$env/static/private';
 import { type RequestHandler } from '@sveltejs/kit';
 import { type WorkoutInfo } from '$lib/types';
-import { getTags, postTags } from '$lib/tag-helpers';
 
 export const GET: RequestHandler = async ({ url }) => {
 	// Need to update backend to allow for filtering by workout_date
@@ -26,8 +25,7 @@ export const GET: RequestHandler = async ({ url }) => {
 			objectId: workout.object_id,
 			workoutDate: workout.workout_date,
 			notes: workout.notes,
-			title: workout.title,
-			tags: []
+			title: workout.title
 		});
 	}
 	return new Response(JSON.stringify(workouts), {
@@ -43,7 +41,6 @@ export const POST: RequestHandler = async ({ url, request }) => {
 		return new Response('Unauthorized', { status: 401 });
 	}
 	const json = await request.json();
-	const tags = json.tags;
 	const formattedBody = {
 		workout_date: json.workoutDate,
 		notes: json.notes,
@@ -55,7 +52,5 @@ export const POST: RequestHandler = async ({ url, request }) => {
 		headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
 		body: JSON.stringify(formattedBody)
 	});
-	// const failedTags = await postTags(token, json.objectId, tags);
-	// console.log(`failed tags: ${failedTags}`);
 	return response;
 };

@@ -1,7 +1,6 @@
 import { HARD_API } from '$env/static/private';
 import { type RequestHandler } from '@sveltejs/kit';
 import { type Set } from '$lib/types';
-import { getTags, postTags } from '$lib/tag-helpers';
 
 export const GET: RequestHandler = async ({ url }) => {
 	// Need to update backend to allow for filtering by set_date
@@ -69,8 +68,6 @@ export const POST: RequestHandler = async ({ url, request }) => {
 		headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
 		body: JSON.stringify(formattedBody)
 	});
-	// const failedTags = await postTags(token, json.objectId, tags);
-	// console.log(`failed tags: ${failedTags}`);
 	const responseJson = await response.json();
 	const formattedResponse = {
 		objectId: responseJson.object_id,

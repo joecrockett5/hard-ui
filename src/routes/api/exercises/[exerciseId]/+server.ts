@@ -1,6 +1,5 @@
 import { HARD_API } from '$env/static/private';
 import { type RequestHandler } from '@sveltejs/kit';
-import { getTags, putTags, deleteTags } from '$lib/tag-helpers';
 import { type Exercise } from '$lib/types';
 
 export const GET: RequestHandler = async ({ url, params }) => {
@@ -14,7 +13,6 @@ export const GET: RequestHandler = async ({ url, params }) => {
 	const response = await fetch(`${HARD_API}/exercises/${exerciseId}`, {
 		headers: { Authorization: `Bearer ${token}` }
 	});
-	const tags = await getTags(token, exerciseId);
 	const json = await response.json();
 	const formattedBody: Exercise = {
 		userId: json.user_id,
@@ -22,8 +20,7 @@ export const GET: RequestHandler = async ({ url, params }) => {
 		objectType: json.object_type,
 		objectId: json.object_id,
 		name: json.name,
-		description: json.description,
-		tags
+		description: json.description
 	};
 	return new Response(JSON.stringify(formattedBody), {
 		status: response.status
@@ -39,7 +36,6 @@ export const PUT: RequestHandler = async ({ url, params, request }) => {
 		return new Response('Unauthorized', { status: 401 });
 	}
 	const json = await request.json();
-	const tags = json.tags;
 	const formattedBody = {
 		timestamp: json.timestamp,
 		object_id: json.objectId,
@@ -51,8 +47,6 @@ export const PUT: RequestHandler = async ({ url, params, request }) => {
 		headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
 		body: JSON.stringify(formattedBody)
 	});
-	// const failedTags = await putTags(token, tags);
-	// console.log(`failed tags: ${failedTags}`);
 	return response;
 };
 
@@ -64,12 +58,9 @@ export const DELETE: RequestHandler = async ({ url, params }) => {
 		console.log('Missing token');
 		return new Response('Unauthorized', { status: 401 });
 	}
-	const tags = await getTags(token, exerciseId);
 	const response = await fetch(`${HARD_API}/exercises/${exerciseId}`, {
 		method: 'DELETE',
 		headers: { Authorization: `Bearer ${token}` }
 	});
-	const failedTags = await deleteTags(token, tags);
-	console.log(`failed tags: ${failedTags}`);
 	return response;
 };

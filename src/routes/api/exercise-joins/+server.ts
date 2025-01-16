@@ -1,7 +1,6 @@
 import { HARD_API } from '$env/static/private';
 import { type RequestHandler } from '@sveltejs/kit';
 import { type Exercise } from '$lib/types';
-import { getTags, postTags } from '$lib/tag-helpers';
 
 export const GET: RequestHandler = async ({ url }) => {
 	// Need to update backend to allow for filtering by exercisejoin_date

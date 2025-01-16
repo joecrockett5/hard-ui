@@ -15,7 +15,6 @@ export type Set = Base & {
 	weight: number;
 	weightUnit: 'kg' | 'lbs';
 	reps: number;
-	tags: Tag[];
 	notes: string;
 	exerciseJoinId: string;
 };
@@ -23,7 +22,6 @@ export type Set = Base & {
 export type Exercise = Base & {
 	name: string;
 	description: string;
-	tags: Tag[];
 	sets?: Set[];
 	joinId?: string;
 	workoutId?: string;
@@ -32,6 +30,5 @@ export type Exercise = Base & {
 export type WorkoutInfo = Base & {
 	workoutDate: string;
 	title: string;
-	tags: Tag[];
 	notes: string;
 };
