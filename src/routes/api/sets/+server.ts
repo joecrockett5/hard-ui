@@ -56,9 +56,9 @@ export const POST: RequestHandler = async ({ url, request }) => {
 	const json = await request.json();
 	const formattedBody = {
 		set_type: json.setType,
-		weight: json.weight,
+		weight: json.weight.replace('+', '.'),
 		unit: json.weightUnit,
-		reps: json.reps,
+		reps: json.reps.replace('+', '.'),
 		notes: json.notes,
 		exercise_join_id: json.exerciseJoinId
 	};

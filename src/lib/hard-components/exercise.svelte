@@ -37,10 +37,8 @@
 	let workingSetReps = undefined;
 	let workingSetNotes = '';
 
-	$: {
-		if (workingSets.length > 0) {
-			workingSetWeight = workingSets.at(-1).weight;
-		}
+	if (workingSets.length > 0) {
+		workingSetWeight = workingSets.at(-1).weight;
 	}
 
 	const creatingWarmupSet = writable(false);

@@ -44,9 +44,9 @@ export const PUT: RequestHandler = async ({ url, params, request }) => {
 		timestamp: json.timestamp,
 		object_id: json.objectId,
 		set_type: json.setType,
-		weight: json.weight,
+		weight: json.weight.replace('+', '.'),
 		unit: json.weightUnit,
-		reps: json.reps,
+		reps: json.reps.replace('+', '.'),
 		notes: json.notes,
 		exercise_join_id: json.exerciseJoinId
 	};
