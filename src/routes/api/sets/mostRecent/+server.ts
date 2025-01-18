@@ -26,7 +26,6 @@ export const GET: RequestHandler = async ({ url }) => {
 	}
 	// order by timestamp desc
 	exJoins.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-	console.log(exJoins);
 	// get sets where exercise_join_id = ex joins
 	const setsResponse = await fetch(`${HARD_API}/sets?exercise=${exerciseId}`, {
 		headers: { Authorization: `Bearer ${token}` }
