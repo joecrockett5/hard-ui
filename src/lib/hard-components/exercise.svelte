@@ -211,14 +211,18 @@
 							})})</Accordion.Trigger
 						>
 						<Accordion.Content class="w-full">
-							<h4 class="text-l font-bold">Warmup Sets</h4>
-							{#each sortedOldSets.warmup as set}
-								<SetComponent {set} deletionCallback={deleteSet} brief />
-							{/each}
-							<h4 class="text-l font-bold mt-2">Working Sets</h4>
-							{#each sortedOldSets.working as set}
-								<SetComponent {set} deletionCallback={deleteSet} brief />
-							{/each}
+							{#if sortedOldSets.warmup.length > 0}
+								<h4 class="text-l font-bold">Warmup Sets</h4>
+								{#each sortedOldSets.warmup as set}
+									<SetComponent {set} deletionCallback={deleteSet} brief />
+								{/each}
+							{/if}
+							{#if sortedOldSets.working.length > 0}
+								<h4 class="text-l font-bold mt-2">Working Sets</h4>
+								{#each sortedOldSets.working as set}
+									<SetComponent {set} deletionCallback={deleteSet} brief />
+								{/each}
+							{/if}
 						</Accordion.Content>
 					</Accordion.Item>
 				</Accordion.Root>
