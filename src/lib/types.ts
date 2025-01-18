@@ -32,3 +32,8 @@ export type WorkoutInfo = Base & {
 	title: string;
 	notes: string;
 };
+
+export type Template = Base & {
+	name: string;
+	description: string;
+};
