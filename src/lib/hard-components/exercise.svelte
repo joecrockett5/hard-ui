@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import * as Accordion from '$lib/components/ui/accordion';
 	import { goto } from '$app/navigation';
 	import * as Card from '$lib/components/ui/card';
 	import SetComponent from '$lib/hard-components/set.svelte';
@@ -142,6 +144,31 @@
 			goto(`/workouts/${workoutId}`);
 		}
 	}
+
+	let oldSets: Set[] = [];
+
+	async function fetchOldSets() {
+		const session = await fetchAuthSession();
+		const response = await fetch(
+			`/api/sets/mostRecent?token=${session.tokens?.idToken?.toString()}&exercise=${exercise.objectId}`
+		);
+		if (!response.ok) {
+			console.error(`Failed to fetch old sets for ${exercise.name}, got ${response.status}`);
+			return;
+		}
+		const sets = await response.json();
+		oldSets = sets;
+	}
+
+	function sortOldSets(sets: Set[]) {
+		return {
+			warmup: sets.filter((set) => set.setType === 'warmup'),
+			working: sets.filter((set) => set.setType === 'working')
+		};
+	}
+
+	onMount(fetchOldSets);
+	$: sortedOldSets = sortOldSets(oldSets);
 </script>
 
 <Card.Root class="mt-4">
@@ -173,16 +200,31 @@
 	</Card.Header>
 	<Card.Content>
 		<div>
-			{#if exercise.tags}
-				{#each exercise.tags as tag}
-					<div class="flex gap-2 items-center">
-						<span class="rounded-full w-4 h-4 bg-gray-200" style="background-color: {tag.color}" />
-						<span>{tag.name}</span>
-					</div>
-				{/each}
+			{#if oldSets.length > 0}
+				<Accordion.Root>
+					<Accordion.Item value="previous-sets">
+						<Accordion.Trigger class="w-full mt-0"
+							>Previous Sets ({new Date(oldSets[0].timestamp).toLocaleDateString('en-GB', {
+								day: '2-digit',
+								month: '2-digit',
+								year: '2-digit'
+							})})</Accordion.Trigger
+						>
+						<Accordion.Content class="w-full">
+							<h4 class="text-l font-bold">Warmup Sets</h4>
+							{#each sortedOldSets.warmup as set}
+								<SetComponent {set} deletionCallback={deleteSet} brief />
+							{/each}
+							<h4 class="text-l font-bold mt-2">Working Sets</h4>
+							{#each sortedOldSets.working as set}
+								<SetComponent {set} deletionCallback={deleteSet} brief />
+							{/each}
+						</Accordion.Content>
+					</Accordion.Item>
+				</Accordion.Root>
 			{/if}
 		</div>
-		<div class="mt-6">
+		<div class="mt-4">
 			<h3 class="text-xl font-bold">Warmup Sets</h3>
 			{#each warmupSets as set}
 				<SetComponent {set} deletionCallback={deleteSet} />

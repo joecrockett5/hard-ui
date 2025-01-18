@@ -10,6 +10,7 @@
 
 	export let set: Set;
 	export let deletionCallback: (set: Set) => void;
+	export let brief = false;
 
 	let updatedWeight = set.weight;
 	let updatedReps = set.reps;
@@ -52,29 +53,31 @@
 		<div class="flex justify-between items-center">
 			<p class="ml-4">{set.reps} reps @ {set.weight} {set.weightUnit}</p>
 
-			<Dialog.Root>
-				<Dialog.Trigger class={`ml-auto ${buttonVariants({ variant: 'ghost' })}`}
-					>Edit</Dialog.Trigger
-				>
-				<Dialog.Content class="w-3/4 max-w-lg">
-					<Dialog.Header>
-						<Dialog.Title>Edit Set</Dialog.Title>
-					</Dialog.Header>
-					<InlineSetEdit
-						bind:reps={updatedReps}
-						bind:weight={updatedWeight}
-						bind:notes={updatedNotes}
-					/>
-					<br />
-					<Dialog.Footer class="flex flex-row gap-2">
-						<ConfirmDelete {deletionCallback} {set} />
-						<Dialog.Close
-							class={buttonVariants({ variant: 'default' }) + ' ml-auto'}
-							on:click={updateSet}>Save</Dialog.Close
-						>
-					</Dialog.Footer>
-				</Dialog.Content>
-			</Dialog.Root>
+			{#if !brief}
+				<Dialog.Root>
+					<Dialog.Trigger class={`ml-auto ${buttonVariants({ variant: 'ghost' })}`}
+						>Edit</Dialog.Trigger
+					>
+					<Dialog.Content class="w-3/4 max-w-lg">
+						<Dialog.Header>
+							<Dialog.Title>Edit Set</Dialog.Title>
+						</Dialog.Header>
+						<InlineSetEdit
+							bind:reps={updatedReps}
+							bind:weight={updatedWeight}
+							bind:notes={updatedNotes}
+						/>
+						<br />
+						<Dialog.Footer class="flex flex-row gap-2">
+							<ConfirmDelete {deletionCallback} {set} />
+							<Dialog.Close
+								class={buttonVariants({ variant: 'default' }) + ' ml-auto'}
+								on:click={updateSet}>Save</Dialog.Close
+							>
+						</Dialog.Footer>
+					</Dialog.Content>
+				</Dialog.Root>
+			{/if}
 		</div>
 		{#if set.notes}
 			<p class="ml-4 mb-4"><b>Notes:</b> {set.notes}</p>
