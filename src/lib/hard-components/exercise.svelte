@@ -161,14 +161,22 @@
 	}
 
 	function sortOldSets(sets: Set[]) {
-		return {
+		const sortedSets = {
 			warmup: sets.filter((set) => set.setType === 'warmup'),
 			working: sets.filter((set) => set.setType === 'working')
 		};
+		if (sortedSets.warmup.length > 0) {
+			warmupSetWeight = sortedSets.warmup[0].weight;
+		}
+		if (sortedSets.working.length > 0 && workingSets.length === 0) {
+			workingSetWeight = sortedSets.working[0].weight;
+		}
+		return sortedSets;
 	}
 
 	onMount(fetchOldSets);
 	$: sortedOldSets = sortOldSets(oldSets);
+	$: console.log('sortedOldSets', sortedOldSets);
 </script>
 
 <Card.Root class="mt-4">
