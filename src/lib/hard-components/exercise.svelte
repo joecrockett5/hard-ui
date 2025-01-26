@@ -145,38 +145,53 @@
 		}
 	}
 
-	let oldSets: Set[] = [];
+	let oldInstances;
 
 	async function fetchOldSets() {
 		const session = await fetchAuthSession();
 		const response = await fetch(
-			`/api/sets/mostRecent?token=${session.tokens?.idToken?.toString()}&exercise=${exercise.objectId}`
+			`/api/sets/recent?token=${session.tokens?.idToken?.toString()}&exercise=${exercise.objectId}`
 		);
 		if (!response.ok) {
 			console.error(`Failed to fetch old sets for ${exercise.name}, got ${response.status}`);
 			return;
 		}
-		const sets = await response.json();
-		oldSets = sets;
+		const instances = await response.json();
+		oldInstances = instances;
 	}
 
-	function sortOldSets(sets: Set[]) {
-		const sortedSets = {
-			warmup: sets.filter((set) => set.setType === 'warmup'),
-			working: sets.filter((set) => set.setType === 'working')
-		};
-		if (sortedSets.warmup.length > 0) {
-			warmupSetWeight = sortedSets.warmup[0].weight;
+	function sortOldSets(instances: { timestamp: Set[] }) {
+		const sortedInstances = [];
+
+		if (!instances) {
+			return sortedInstances;
 		}
-		if (sortedSets.working.length > 0 && workingSets.length === 0) {
-			workingSetWeight = sortedSets.working[0].weight;
+
+		for (const [timestamp, sets] of Object.entries(instances)) {
+			const sortedSets = {
+				timestamp: new Date(timestamp),
+				warmup: sets.filter((set) => set.setType === 'warmup'),
+				working: sets.filter((set) => set.setType === 'working')
+			};
+			sortedInstances.push(sortedSets);
 		}
-		return sortedSets;
+		// Sort chronologically
+		sortedInstances.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
+
+		if (sortedInstances && sortedInstances.at(-1).warmup.length > 0) {
+			warmupSetWeight = sortedInstances.at(-1).warmup[0].weight;
+		}
+
+		if (sortedInstances && sortedInstances.at(-1).working.length > 0 && workingSets.length === 0) {
+			workingSetWeight = sortedInstances.at(-1).working[0].weight;
+		}
+
+		return sortedInstances;
 	}
 
 	onMount(fetchOldSets);
-	$: sortedOldSets = sortOldSets(oldSets);
-	$: console.log('sortedOldSets', sortedOldSets);
+	$: sortedOldInstances = sortOldSets(oldInstances);
+	$: console.log('sortedOldInstaces', sortedOldInstances);
 </script>
 
 <Card.Root class="mt-4">
@@ -208,29 +223,38 @@
 	</Card.Header>
 	<Card.Content>
 		<div>
-			{#if oldSets.length > 0}
+			{#if oldInstances}
 				<Accordion.Root>
 					<Accordion.Item value="previous-sets">
-						<Accordion.Trigger class="w-full mt-0"
-							>Previous Sets ({new Date(oldSets[0].timestamp).toLocaleDateString('en-GB', {
-								day: '2-digit',
-								month: '2-digit',
-								year: '2-digit'
-							})})</Accordion.Trigger
-						>
+						<Accordion.Trigger class="w-full mt-0">Previous Sets</Accordion.Trigger>
 						<Accordion.Content class="w-full">
-							{#if sortedOldSets.warmup.length > 0}
-								<h4 class="text-l font-bold">Warmup Sets</h4>
-								{#each sortedOldSets.warmup as set}
-									<SetComponent {set} deletionCallback={deleteSet} brief />
-								{/each}
-							{/if}
-							{#if sortedOldSets.working.length > 0}
-								<h4 class="text-l font-bold mt-2">Working Sets</h4>
-								{#each sortedOldSets.working as set}
-									<SetComponent {set} deletionCallback={deleteSet} brief />
-								{/each}
-							{/if}
+							{#each sortedOldInstances as sortedInstance}
+								<Accordion.Root>
+									<Accordion.Item value={'previous-set' + sortedInstance.timestamp}>
+										<Accordion.Trigger class="w-full mt-0"
+											>{new Date(sortedInstance.timestamp).toLocaleDateString('en-GB', {
+												day: '2-digit',
+												month: '2-digit',
+												year: '2-digit'
+											})}</Accordion.Trigger
+										>
+										<Accordion.Content class="w-full">
+											{#if sortedInstance.warmup.length > 0}
+												<h4 class="text-l font-bold">Warmup Sets</h4>
+												{#each sortedInstance.warmup as set}
+													<SetComponent {set} deletionCallback={deleteSet} brief />
+												{/each}
+											{/if}
+											{#if sortedInstance.working.length > 0}
+												<h4 class="text-l font-bold mt-2">Working Sets</h4>
+												{#each sortedInstance.working as set}
+													<SetComponent {set} deletionCallback={deleteSet} brief />
+												{/each}
+											{/if}
+										</Accordion.Content>
+									</Accordion.Item>
+								</Accordion.Root>
+							{/each}
 						</Accordion.Content>
 					</Accordion.Item>
 				</Accordion.Root>
