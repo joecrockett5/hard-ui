@@ -171,8 +171,13 @@
 			const sortedSets = {
 				timestamp: new Date(timestamp),
 				warmup: sets.filter((set) => set.setType === 'warmup'),
-				working: sets.filter((set) => set.setType === 'working')
+				working: sets.filter((set) => set.setType === 'working'),
+				title: ''
 			};
+			if (sets.length > 0) {
+				// TODO: get workout title
+			}
+
 			sortedInstances.push(sortedSets);
 		}
 		// Sort chronologically
@@ -191,7 +196,6 @@
 
 	onMount(fetchOldSets);
 	$: sortedOldInstances = sortOldSets(oldInstances);
-	$: console.log('sortedOldInstaces', sortedOldInstances);
 </script>
 
 <Card.Root class="mt-4">
@@ -236,8 +240,8 @@
 												day: '2-digit',
 												month: '2-digit',
 												year: '2-digit'
-											})}</Accordion.Trigger
-										>
+											})}
+										</Accordion.Trigger>
 										<Accordion.Content class="w-full">
 											{#if sortedInstance.warmup.length > 0}
 												<h4 class="text-l font-bold">Warmup Sets</h4>

@@ -15,17 +15,14 @@
 	let { exercises, workoutInfo, allExercises } = data;
 	let possibleExercises = [...allExercises];
 
-	$: possibleExercises = possibleExercises.filter(
-		(exercise: Exercise) => !exercises.find((e: Exercise) => e.objectId === exercise.objectId)
-	);
-
 	let search = '';
 
 	$: possibleExercises = allExercises
 		.filter((exercise: Exercise) => exercise.name.toLowerCase().includes(search.toLowerCase()))
 		.filter(
 			(exercise: Exercise) => !exercises.find((e: Exercise) => e.objectId === exercise.objectId)
-		);
+		)
+		.sort((a: Exercise, b: Exercise) => a.name.localeCompare(b.name));
 
 	const addExercise = async (exercise: Exercise) => {
 		console.log(`adding exercise: ${exercise.name}`);
