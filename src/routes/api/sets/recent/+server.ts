@@ -27,6 +27,7 @@ export const GET: RequestHandler = async ({ url }) => {
 	// order by timestamp desc
 	exJoins.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 	exJoins.shift(); // remove first element (current instance)
+	const last3 = exJoins.splice(0, 3);
 
 	// get sets where exercise_join_id = ex joins
 	const setsResponse = await fetch(`${HARD_API}/sets?exercise=${exerciseId}`, {
@@ -34,7 +35,7 @@ export const GET: RequestHandler = async ({ url }) => {
 	});
 	const rawSets = await setsResponse.json();
 	const recentInstances = {};
-	for (const join of exJoins) {
+	for (const join of last3) {
 		let relevantSets = rawSets
 			.filter((set) => join.object_id === set.exercise_join_id)
 			.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
