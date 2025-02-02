@@ -13,11 +13,7 @@
 	import NewItem from '$lib/hard-components/new-item.svelte';
 	import { fetchAuthSession } from 'aws-amplify/auth';
 
-	let customDate;
-
-	if ($page.url) {
-		customDate = $page.url.searchParams.get('date');
-	}
+	let customDate = $page.url.searchParams.get('date');
 
 	let workouts: WorkoutInfo[] = [];
 	let selectedDate = writable(today(getLocalTimeZone()));
