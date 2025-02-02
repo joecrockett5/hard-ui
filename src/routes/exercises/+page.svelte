@@ -7,12 +7,18 @@
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { fetchAuthSession } from '@aws-amplify/auth';
 	import { type Exercise } from '$lib/types';
+	import * as Pagination from '$lib/components/ui/pagination';
+	import ChevronLeft from 'lucide-svelte/icons/chevron-left';
+	import ChevronRight from 'lucide-svelte/icons/chevron-right';
 
 	export let data;
 
+	let page = 1;
+
 	let { exercises } = data;
-	console.log('exercises');
-	console.log(exercises);
+	exercises = exercises.sort((a: Exercise, b: Exercise) => a.name.localeCompare(b.name));
+
+	$: viewableExercises = exercises.slice((page - 1) * 10, page * 10);
 
 	let newExerciseName = '';
 	let newExerciseDescription = '';
@@ -93,6 +99,78 @@
 	</Dialog.Footer>
 </NewItem>
 
-{#each exercises as exercise}
+<Pagination.Root
+	class="mt-4"
+	count={exercises.length}
+	perPage={10}
+	let:pages
+	let:currentPage
+	bind:page
+>
+	<Pagination.Content>
+		<Pagination.Item>
+			<Pagination.PrevButton>
+				<ChevronLeft class="h-4 w-4" />
+			</Pagination.PrevButton>
+		</Pagination.Item>
+		{#each pages as page (page.key)}
+			{#if page.type === 'ellipsis'}
+				<Pagination.Item>
+					<Pagination.Ellipsis />
+				</Pagination.Item>
+			{:else}
+				<Pagination.Item isVisible={currentPage == page.value}>
+					<Pagination.Link {page} isActive={currentPage == page.value}>
+						{page.value}
+					</Pagination.Link>
+				</Pagination.Item>
+			{/if}
+		{/each}
+		<Pagination.Item>
+			<Pagination.NextButton>
+				<ChevronRight class="h-4 w-4" />
+			</Pagination.NextButton>
+		</Pagination.Item>
+	</Pagination.Content>
+</Pagination.Root>
+
+{#each viewableExercises as exercise}
 	<ExerciseInfoComponent {exercise} deletionCallback={deleteExercise} />
 {/each}
+
+<div class="mb-8" />
+
+<Pagination.Root
+	class="mt-4"
+	count={exercises.length}
+	perPage={10}
+	let:pages
+	let:currentPage
+	bind:page
+>
+	<Pagination.Content>
+		<Pagination.Item>
+			<Pagination.PrevButton>
+				<ChevronLeft class="h-4 w-4" />
+			</Pagination.PrevButton>
+		</Pagination.Item>
+		{#each pages as page (page.key)}
+			{#if page.type === 'ellipsis'}
+				<Pagination.Item>
+					<Pagination.Ellipsis />
+				</Pagination.Item>
+			{:else}
+				<Pagination.Item isVisible={currentPage == page.value}>
+					<Pagination.Link {page} isActive={currentPage == page.value}>
+						{page.value}
+					</Pagination.Link>
+				</Pagination.Item>
+			{/if}
+		{/each}
+		<Pagination.Item>
+			<Pagination.NextButton>
+				<ChevronRight class="h-4 w-4" />
+			</Pagination.NextButton>
+		</Pagination.Item>
+	</Pagination.Content>
+</Pagination.Root>
