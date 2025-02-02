@@ -18,7 +18,11 @@
 	let search = '';
 
 	$: possibleExercises = allExercises
-		.filter((exercise: Exercise) => exercise.name.toLowerCase().includes(search.toLowerCase()))
+		.filter(
+			(exercise: Exercise) =>
+				exercise.name.toLowerCase().includes(search.toLowerCase()) ||
+				exercise.description.toLowerCase().includes(search.toLowerCase())
+		)
 		.filter(
 			(exercise: Exercise) => !exercises.find((e: Exercise) => e.objectId === exercise.objectId)
 		)
@@ -90,7 +94,7 @@
 
 <NewItem item="Exercise" description={`Add exercise to '${workoutInfo.title}'`} className="h-3/4">
 	<div class="self-start">
-		<label for="Search" class="text-left">Search:</label>
+		<label for="Search" class="text-left"><b>Search:</b></label>
 		<Input placeholder="Exercise Name" bind:value={search} />
 	</div>
 	<ScrollArea>
