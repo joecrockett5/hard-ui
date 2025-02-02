@@ -4,7 +4,9 @@
 	import WorkoutInfoComponent from '$lib/hard-components/workout-info.svelte';
 	import NewItem from '$lib/hard-components/new-item.svelte';
 	import { type Exercise, type WorkoutInfo } from '$lib/types';
-	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
+	import * as Pagination from '$lib/components/ui/pagination';
+	import ChevronLeft from 'lucide-svelte/icons/chevron-left';
+	import ChevronRight from 'lucide-svelte/icons/chevron-right';
 	import Input from '$lib/components/ui/input/input.svelte';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { fetchAuthSession } from '@aws-amplify/auth';
@@ -27,6 +29,19 @@
 			(exercise: Exercise) => !exercises.find((e: Exercise) => e.objectId === exercise.objectId)
 		)
 		.sort((a: Exercise, b: Exercise) => a.name.localeCompare(b.name));
+
+	let exercisePage = 1;
+	const pageSize = 3;
+
+	$: viewableExercises = possibleExercises.slice(
+		(exercisePage - 1) * pageSize,
+		exercisePage * pageSize
+	);
+
+	$: {
+		console.log(search);
+		exercisePage = 1;
+	}
 
 	const addExercise = async (exercise: Exercise) => {
 		console.log(`adding exercise: ${exercise.name}`);
@@ -92,18 +107,53 @@
 
 <WorkoutInfoComponent workout={workoutInfo} deletionCallback={deleteWorkout} />
 
-<NewItem item="Exercise" description={`Add exercise to '${workoutInfo.title}'`} className="h-3/4">
-	<div class="self-start">
+<NewItem item="Exercise" description={`Add exercise to '${workoutInfo.title}'`} className="h-4/5">
+	<div>
 		<label for="Search" class="text-left"><b>Search:</b></label>
 		<Input placeholder="Exercise Name" bind:value={search} />
 	</div>
-	<ScrollArea>
-		{#each possibleExercises as possibleExercise}
-			<Dialog.Close class="w-full text-left" on:click={() => addExercise(possibleExercise)}>
-				<ExerciseInfoComponent exercise={possibleExercise} brief />
-			</Dialog.Close>
-		{/each}
-	</ScrollArea>
+	<Pagination.Root
+		class="mt-4"
+		count={possibleExercises.length}
+		perPage={pageSize}
+		siblingCount={0}
+		let:pages
+		let:currentPage
+		bind:page={exercisePage}
+	>
+		<Pagination.Content>
+			<Pagination.Item>
+				<Pagination.PrevButton>
+					<ChevronLeft class="h-4 w-4" />
+				</Pagination.PrevButton>
+			</Pagination.Item>
+			{#each pages as page (page.key)}
+				{#if page.type === 'ellipsis'}
+					<Pagination.Item>
+						<Pagination.Ellipsis />
+					</Pagination.Item>
+				{:else}
+					<Pagination.Item isVisible={currentPage == page.value}>
+						<Pagination.Link {page} isActive={currentPage == page.value}>
+							{page.value}
+						</Pagination.Link>
+					</Pagination.Item>
+				{/if}
+			{/each}
+			<Pagination.Item>
+				<Pagination.NextButton>
+					<ChevronRight class="h-4 w-4" />
+				</Pagination.NextButton>
+			</Pagination.Item>
+		</Pagination.Content>
+	</Pagination.Root>
+
+	{#each viewableExercises as possibleExercise}
+		<Dialog.Close class="w-full text-left" on:click={() => addExercise(possibleExercise)}>
+			<ExerciseInfoComponent exercise={possibleExercise} brief />
+		</Dialog.Close>
+	{/each}
+	<div class={`h-[${(pageSize - viewableExercises.length) * 134}px]`} />
 </NewItem>
 
 {#each exercises as exercise}

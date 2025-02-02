@@ -20,6 +20,7 @@
 				{description}
 			</Dialog.Description>
 		</Dialog.Header>
+		<div class="mt-4" />
 
 		<slot />
 	</Dialog.Content>
