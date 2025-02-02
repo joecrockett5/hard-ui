@@ -69,12 +69,8 @@
 				<Sheet.Close class="w-full">
 					<div class="grid gap-2 py-4">
 						<div class="grid grid-cols-2 items-center gap-4">
-							<Button href="/workouts" variant="secondary">Workouts</Button>
-							<Button href="/exercises" variant="secondary">Exercises</Button>
-						</div>
-						<div class="grid grid-cols-2 items-center gap-4">
-							<Button href="/tags" variant="secondary">Tags</Button>
-							<Button href="/meso-cycles" variant="secondary">Meso Cycles</Button>
+							<Button href="/workouts" variant="secondary" class="h-20">Workouts</Button>
+							<Button href="/exercises" variant="secondary" class="h-20">Exercises</Button>
 						</div>
 					</div>
 				</Sheet.Close>
