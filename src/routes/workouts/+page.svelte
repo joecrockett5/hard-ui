@@ -13,16 +13,17 @@
 	import NewItem from '$lib/hard-components/new-item.svelte';
 	import { fetchAuthSession } from 'aws-amplify/auth';
 
-	let customDate = $page.url.searchParams.get('date');
+	// let customDate = $page.url.searchParams.get('date');
 
 	let workouts: WorkoutInfo[] = [];
 	let selectedDate = writable(today(getLocalTimeZone()));
 
-	if (customDate) {
-		selectedDate.set(parseDate(customDate));
-	}
+	// if (customDate) {
+	// 	selectedDate.set(parseDate(customDate));
+	// }
 
 	const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+	const japaneseWeekdays = ['日曜', '月曜', '火曜', '水曜', '木曜', '金曜', '土曜'];
 	const months = [
 		'January',
 		'February',
@@ -53,8 +54,8 @@
 	};
 
 	$: asDate = $selectedDate.toDate(getLocalTimeZone());
-	$: shortDate = `${asDate.getDate()}/${asDate.getMonth() + 1}/${asDate.getFullYear()}`;
-	$: longDate = `${weekdays[asDate.getDay()]}, ${asDate.getDate()}${nthNumber(asDate.getDate())} ${months[asDate.getMonth()]} ${asDate.getFullYear()}`;
+	$: shortDate = `${asDate.getFullYear()}年${asDate.getMonth() + 1}月${asDate.getDate()}日`;
+	$: longDate = `${asDate.getFullYear()}年の${asDate.getMonth() + 1}月${asDate.getDate()}日、${japaneseWeekdays[asDate.getDay()]}`;
 
 	async function loadDate(date) {
 		const session = await fetchAuthSession();
@@ -126,21 +127,21 @@
 <Card.Root class="mt-4">
 	<Card.Header>
 		<Card.Title>{longDate}</Card.Title>
-		<Card.Description>All workouts recorded for {shortDate}</Card.Description>
+		<Card.Description>{shortDate}のトレーニング全部</Card.Description>
 	</Card.Header>
 </Card.Root>
 
-<NewItem item="Workout">
-	<label for="date">Date</label>
-	<Input value={$selectedDate} type="date" disabled />
-	<label for="title">Title</label>
-	<Input placeholder="Title of the workout" bind:value={newWorkoutTitle} />
-	<label for="Notes">Notes</label>
-	<Input placeholder="notes for the workout" bind:value={newWorkoutNotes} />
+<NewItem item="トレーニング">
+	<label for="date">日付：</label>
+	<Input value={shortDate} disabled />
+	<label for="title">タイトル：</label>
+	<Input placeholder="タイトル" bind:value={newWorkoutTitle} />
+	<label for="Notes">メモ：</label>
+	<Input placeholder="メモ" bind:value={newWorkoutNotes} />
 	<br />
 	<Dialog.Footer>
 		<Dialog.Close class={buttonVariants({ variant: 'default' })} on:click={addWorkout}
-			>Add</Dialog.Close
+			>追加</Dialog.Close
 		>
 	</Dialog.Footer>
 </NewItem>

@@ -107,10 +107,14 @@
 
 <WorkoutInfoComponent workout={workoutInfo} deletionCallback={deleteWorkout} />
 
-<NewItem item="Exercise" description={`Add exercise to '${workoutInfo.title}'`} className="h-4/5">
+<NewItem
+	item="エクササイズ"
+	description={`「${workoutInfo.title}」にエクササイズを追加する`}
+	className="h-4/5"
+>
 	<div>
-		<label for="Search" class="text-left"><b>Search:</b></label>
-		<Input placeholder="Exercise Name" bind:value={search} />
+		<label for="Search" class="text-left"><b>検索：</b></label>
+		<Input placeholder="名前または説明" bind:value={search} />
 	</div>
 	<Pagination.Root
 		class="mt-4"

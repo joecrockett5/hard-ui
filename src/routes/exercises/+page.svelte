@@ -81,20 +81,20 @@
 
 <Card.Root class="mt-4">
 	<Card.Header>
-		<Card.Title>Exercises</Card.Title>
-		<Card.Description>All registered exercises</Card.Description>
+		<Card.Title>エクササイズ</Card.Title>
+		<Card.Description>全てのエクササイズ</Card.Description>
 	</Card.Header>
 </Card.Root>
 
-<NewItem item="Exercise">
-	<label for="name">Name</label>
-	<Input placeholder="Name of the exercise" bind:value={newExerciseName} />
-	<label for="description">Description</label>
-	<Input placeholder="Description of the exercise" bind:value={newExerciseDescription} />
+<NewItem item="エクササイズ">
+	<label for="name">名前：</label>
+	<Input placeholder="名前" bind:value={newExerciseName} />
+	<label for="description">説明：</label>
+	<Input placeholder="説明" bind:value={newExerciseDescription} />
 	<br />
 	<Dialog.Footer>
 		<Dialog.Close class={buttonVariants({ variant: 'default' })} on:click={addExercise}
-			>Add</Dialog.Close
+			>追加</Dialog.Close
 		>
 	</Dialog.Footer>
 </NewItem>

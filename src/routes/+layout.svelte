@@ -61,16 +61,15 @@
 			<Sheet.Content side="bottom">
 				<Sheet.Header>
 					<Sheet.Close>
-						<Sheet.Title><a href="/">Hard</a></Sheet.Title>
-						<Sheet.Description>lorem ipsum dolor sit amet, consectetur adipiscing</Sheet.Description
-						>
+						<Sheet.Title><a href="/">ハード</a></Sheet.Title>
+						<Sheet.Description>ハードトレーニングアプリ</Sheet.Description>
 					</Sheet.Close>
 				</Sheet.Header>
 				<Sheet.Close class="w-full">
 					<div class="grid gap-2 py-4">
 						<div class="grid grid-cols-2 items-center gap-4">
-							<Button href="/workouts" variant="secondary" class="h-20">Workouts</Button>
-							<Button href="/exercises" variant="secondary" class="h-20">Exercises</Button>
+							<Button href="/workouts" variant="secondary" class="h-20">トレーニング</Button>
+							<Button href="/exercises" variant="secondary" class="h-20">エクササイズ</Button>
 						</div>
 					</div>
 				</Sheet.Close>
@@ -83,7 +82,7 @@
 			</ScrollArea>
 		</div>
 	{:else}
-		<p>Please Log In</p>
-		<Button class="mt-4" on:click={() => signInWithRedirect()}>Sign In</Button>
+		<p>サインインしてください</p>
+		<Button class="mt-4" on:click={() => signInWithRedirect()}>ログイン</Button>
 	{/if}
 {/await}

@@ -208,24 +208,24 @@
 	<Card.Root class="mt-4">
 		<Dialog.Root>
 			<Dialog.Trigger class={`float-right top-4 right-4 ${buttonVariants({ variant: 'ghost' })}`}
-				>Remove</Dialog.Trigger
+				>削除</Dialog.Trigger
 			>
 			<Dialog.Content class="w-3/4">
 				<Dialog.Header>
-					<Dialog.Title>Are you sure you want to remove this exercise?</Dialog.Title>
-					<Dialog.Description>This cannot be undone.</Dialog.Description>
+					<Dialog.Title>本当に削除しますか？</Dialog.Title>
+					<Dialog.Description>これは元に戻すことはできません。</Dialog.Description>
 				</Dialog.Header>
 				<Dialog.Footer>
-					<Dialog.Close class={buttonVariants({ variant: 'ghost' })}>Cancel</Dialog.Close>
+					<Dialog.Close class={buttonVariants({ variant: 'ghost' })}>キャンセル</Dialog.Close>
 					<Dialog.Close
 						on:click={() => deletionCallback(exercise)}
-						class={buttonVariants({ variant: 'destructive' })}>Remove</Dialog.Close
+						class={buttonVariants({ variant: 'destructive' })}>削除</Dialog.Close
 					>
 				</Dialog.Footer>
 			</Dialog.Content>
 		</Dialog.Root>
 		<Button on:click={toggleMinimized} variant="ghost" class="float-right top-4 right-4">
-			Hide
+			隠す
 		</Button>
 		<Card.Header class="w-1/2">
 			<Card.Title>
@@ -275,14 +275,14 @@
 				{/if}
 			</div>
 			<div class="mt-4">
-				<h3 class="text-xl font-bold">Warmup Sets</h3>
+				<h3 class="text-xl font-bold">準備に始めるセット</h3>
 				{#each warmupSets as set}
 					<SetComponent {set} deletionCallback={deleteSet} />
 				{/each}
 				{#if $creatingWarmupSet}
 					<Skeleton class="h-14 w-full mt-2" />
 				{/if}
-				<NewItem item="Warmup Set">
+				<NewItem item="準備に始めるセット">
 					<InlineSetEdit
 						bind:reps={warmupSetReps}
 						bind:weight={warmupSetWeight}
@@ -290,20 +290,20 @@
 					/>
 					<Dialog.Footer>
 						<Dialog.Close class={buttonVariants({ variant: 'default' })} on:click={createWarmupSet}
-							>Add</Dialog.Close
+							>追加</Dialog.Close
 						>
 					</Dialog.Footer>
 				</NewItem>
 			</div>
 			<div class="mt-6">
-				<h3 class="text-xl font-bold">Working Sets</h3>
+				<h3 class="text-xl font-bold">ワークセット</h3>
 				{#each workingSets as set}
 					<SetComponent {set} deletionCallback={deleteSet} />
 				{/each}
 				{#if $creatingWorkingSet}
 					<Skeleton class="h-14 w-full mt-2" />
 				{/if}
-				<NewItem item="Working Set">
+				<NewItem item="ワークセット">
 					<InlineSetEdit
 						bind:reps={workingSetReps}
 						bind:weight={workingSetWeight}
@@ -311,7 +311,7 @@
 					/>
 					<Dialog.Footer>
 						<Dialog.Close class={buttonVariants({ variant: 'default' })} on:click={createWorkingSet}
-							>Add</Dialog.Close
+							>追加</Dialog.Close
 						>
 					</Dialog.Footer>
 				</NewItem>

@@ -4,18 +4,18 @@
 	import { Plus } from 'lucide-svelte';
 
 	export let item: string = 'Item';
-	export let description: string = `Create a new ${item}`;
+	export let description: string = '';
 	export let className: string = '';
 </script>
 
 <Dialog.Root>
 	<Dialog.Trigger class={buttonVariants({ variant: 'outline' }) + ' w-full text-gray-400 mt-1'}>
 		<Plus />
-		Add {item}
+		新しい {item}
 	</Dialog.Trigger>
 	<Dialog.Content class={className + ' w-3/4 max-w-lg'}>
 		<Dialog.Header>
-			<Dialog.Title>New {item}</Dialog.Title>
+			<Dialog.Title>新しい {item}</Dialog.Title>
 			<Dialog.Description>
 				{description}
 			</Dialog.Description>
