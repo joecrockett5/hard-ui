@@ -7,10 +7,14 @@
 	import type { Set } from '$lib/types';
 	import { fetchAuthSession } from '@aws-amplify/auth';
 	import ConfirmDelete from '$lib/hard-components/confirm-delete-set.svelte';
+	import Tick from '$lib/svg/tick.svelte';
+	import Cross from '$lib/svg/cross.svelte';
+	import Dash from '$lib/svg/dash.svelte';
 
 	export let set: Set;
 	export let deletionCallback: (set: Set) => void;
 	export let brief = false;
+	export let display: number | undefined = undefined;
 
 	let updatedWeight = set.weight;
 	let updatedReps = set.reps;
@@ -53,11 +57,21 @@
 		<div class="flex justify-between items-center">
 			<p class="ml-4">{set.reps} reps @ {set.weight} {set.weightUnit}</p>
 
+			<div class="ml-auto">
+				{#if display !== undefined}
+					{#if display > 0}
+						<Tick />
+					{:else if display < 0}
+						<Cross />
+					{:else}
+						<Dash />
+					{/if}
+				{/if}
+			</div>
+
 			{#if !brief}
 				<Dialog.Root>
-					<Dialog.Trigger class={`ml-auto ${buttonVariants({ variant: 'ghost' })}`}
-						>Edit</Dialog.Trigger
-					>
+					<Dialog.Trigger class={`${buttonVariants({ variant: 'ghost' })}`}>Edit</Dialog.Trigger>
 					<Dialog.Content class="w-3/4 max-w-lg">
 						<Dialog.Header>
 							<Dialog.Title>Edit Set</Dialog.Title>

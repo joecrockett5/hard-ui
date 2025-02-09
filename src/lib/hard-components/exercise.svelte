@@ -202,6 +202,25 @@
 	function toggleMinimized() {
 		minimized = !minimized;
 	}
+
+	function workDone(set: Set) {
+		return set.weight * set.reps;
+	}
+
+	function setComparison(setIndex: number) {
+		const mostRecentWorkingSets = sortedOldInstances.at(-1).working;
+		if (!mostRecentWorkingSets.at(setIndex)) {
+			return undefined;
+		}
+
+		if (workDone(workingSets.at(setIndex)) > workDone(mostRecentWorkingSets.at(setIndex))) {
+			return 1;
+		} else if (workDone(workingSets.at(setIndex)) < workDone(mostRecentWorkingSets.at(setIndex))) {
+			return -1;
+		} else {
+			return 0;
+		}
+	}
 </script>
 
 {#if !minimized}
@@ -297,8 +316,8 @@
 			</div>
 			<div class="mt-6">
 				<h3 class="text-xl font-bold">ワークセット</h3>
-				{#each workingSets as set}
-					<SetComponent {set} deletionCallback={deleteSet} />
+				{#each workingSets as set, setIndex}
+					<SetComponent {set} deletionCallback={deleteSet} display={setComparison(setIndex)} />
 				{/each}
 				{#if $creatingWorkingSet}
 					<Skeleton class="h-14 w-full mt-2" />
