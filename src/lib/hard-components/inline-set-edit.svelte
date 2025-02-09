@@ -8,6 +8,6 @@
 
 <span class="flex gap-2 items-center">
 	<Input placeholder="レプス" type="tel" autofocus bind:value={reps} class="w-20" /> レプス @
-	<Input placeholder="キロ" type="tel" bind:value={weight} class="w-24" /> キロ
+	<Input placeholder="キロ" type="tel" bind:value={weight} class="w-14" /> キロ
 </span>
 <Input placeholder="メモ" bind:value={notes} class="mt-4 mb-2" />
