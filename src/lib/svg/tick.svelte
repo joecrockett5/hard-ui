@@ -4,7 +4,7 @@
 	y="0px"
 	width="20"
 	height="20"
-	viewBox="0,0,256,256"
+	viewBox="5,0,256,256"
 >
 	<g
 		fill="#1e9800"

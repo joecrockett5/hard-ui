@@ -1,8 +1,9 @@
 <svg
 	fill="#ff1414"
-	height="12px"
-	width="12px"
+	height="12"
+	width="12"
 	version="1.1"
+	style="margin-right: 3px;"
 	id="Capa_1"
 	xmlns="http://www.w3.org/2000/svg"
 	xmlns:xlink="http://www.w3.org/1999/xlink"
