@@ -13,14 +13,14 @@
 	import NewItem from '$lib/hard-components/new-item.svelte';
 	import { fetchAuthSession } from 'aws-amplify/auth';
 
-	// let customDate = $page.url.searchParams.get('date');
+	let customDate = $page.url.searchParams.get('date');
 
 	let workouts: WorkoutInfo[] = [];
 	let selectedDate = writable(today(getLocalTimeZone()));
 
-	// if (customDate) {
-	// 	selectedDate.set(parseDate(customDate));
-	// }
+	if (customDate) {
+		selectedDate.set(parseDate(customDate));
+	}
 
 	const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 	const japaneseWeekdays = ['日曜', '月曜', '火曜', '水曜', '木曜', '金曜', '土曜'];
@@ -123,7 +123,7 @@
 </script>
 
 <svelte:head>
-	<title>Hard: Workouts</title>
+	<title>ハード：トレーニング</title>
 </svelte:head>
 
 <Calendar bind:value={$selectedDate} class="rounded-md border" />

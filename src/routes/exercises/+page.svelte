@@ -80,7 +80,7 @@
 </script>
 
 <svelte:head>
-	<title>Hard: Exercises</title>
+	<title>ハード：エクササイズ</title>
 </svelte:head>
 
 <Card.Root class="mt-4">

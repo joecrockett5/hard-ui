@@ -106,11 +106,11 @@
 	}
 
 	const asDate = new Date(workoutInfo.workoutDate);
-	const shortDate = `${asDate.getDate()}/${asDate.getMonth() < 10 ? '0' : ''}${asDate.getMonth() + 1}/${asDate.getFullYear() - 2000}`;
+	const japaneseDate = `${asDate.getFullYear()}年${asDate.getMonth() + 1}月${asDate.getDate()}日`;
 </script>
 
 <svelte:head>
-	<title>Hard: {workoutInfo.title} - {shortDate}</title>
+	<title>ハード：{workoutInfo.title} - {japaneseDate}</title>
 </svelte:head>
 
 <WorkoutInfoComponent workout={workoutInfo} deletionCallback={deleteWorkout} />
