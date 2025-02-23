@@ -122,6 +122,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>Hard: Workouts</title>
+</svelte:head>
+
 <Calendar bind:value={$selectedDate} class="rounded-md border" />
 
 <Card.Root class="mt-4">

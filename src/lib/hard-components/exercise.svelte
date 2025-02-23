@@ -13,6 +13,7 @@
 	import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte';
 	import { writable } from 'svelte/store';
 	import ExerciseInfoComponent from '$lib/hard-components/exercise-info.svelte';
+	import * as Popover from '$lib/components/ui/popover/index.js';
 
 	export let exercise: Exercise;
 	export let workoutId: string;
@@ -47,13 +48,13 @@
 	const creatingWorkingSet = writable(false);
 
 	async function createWarmupSet() {
+		creatingWarmupSet.set(true);
 		const session = await fetchAuthSession();
 		const response = await fetch(
 			`/api/exercise-joins?token=${session.tokens?.idToken?.toString()}&workout=${workoutId}&exercise=${exercise.objectId}`
 		);
 		const joinJson = await response.json();
 		const join = joinJson[0];
-		creatingWarmupSet.set(true);
 		const createSetResponse = await fetch(
 			`/api/sets?token=${session.tokens?.idToken?.toString()}`,
 			{
@@ -86,13 +87,13 @@
 	}
 
 	async function createWorkingSet() {
+		creatingWorkingSet.set(true);
 		const session = await fetchAuthSession();
 		const response = await fetch(
 			`/api/exercise-joins?token=${session.tokens?.idToken?.toString()}&workout=${workoutId}&exercise=${exercise.objectId}`
 		);
 		const joinJson = await response.json();
 		const join = joinJson[0];
-		creatingWorkingSet.set(true);
 		const createSetResponse = await fetch(
 			`/api/sets?token=${session.tokens?.idToken?.toString()}`,
 			{
@@ -188,7 +189,7 @@
 		}
 
 		if (sortedInstances && sortedInstances.at(-1).working.length > 0 && workingSets.length === 0) {
-			workingSetWeight = sortedInstances.at(-1).working[0].weight;
+			workingSetWeight = Math.max(...sortedInstances.at(-1).working.map((set) => set.weight));
 		}
 
 		return sortedInstances;
@@ -213,7 +214,9 @@
 			return undefined;
 		}
 
-		if (workDone(workingSets.at(setIndex)) > workDone(mostRecentWorkingSets.at(setIndex))) {
+		if (workingSets.at(setIndex).weight > mostRecentWorkingSets.at(setIndex).weight) {
+			return 1;
+		} else if (workDone(workingSets.at(setIndex)) > workDone(mostRecentWorkingSets.at(setIndex))) {
 			return 1;
 		} else if (workDone(workingSets.at(setIndex)) < workDone(mostRecentWorkingSets.at(setIndex))) {
 			return -1;
@@ -257,40 +260,36 @@
 		<Card.Content>
 			<div>
 				{#if oldInstances}
-					<Accordion.Root>
-						<Accordion.Item value="previous-sets">
-							<Accordion.Trigger class="w-full mt-0">Previous Sets</Accordion.Trigger>
-							<Accordion.Content class="w-full">
-								{#each sortedOldInstances as sortedInstance}
-									<Accordion.Root>
-										<Accordion.Item value={'previous-set' + sortedInstance.timestamp}>
-											<Accordion.Trigger class="w-full mt-0"
-												>{new Date(sortedInstance.timestamp).toLocaleDateString('en-GB', {
-													day: '2-digit',
-													month: '2-digit',
-													year: '2-digit'
-												})}
-											</Accordion.Trigger>
-											<Accordion.Content class="w-full">
-												{#if sortedInstance.warmup.length > 0}
-													<h4 class="text-l font-bold">Warmup Sets</h4>
-													{#each sortedInstance.warmup as set}
-														<SetComponent {set} deletionCallback={deleteSet} brief />
-													{/each}
-												{/if}
-												{#if sortedInstance.working.length > 0}
-													<h4 class="text-l font-bold mt-2">Working Sets</h4>
-													{#each sortedInstance.working as set}
-														<SetComponent {set} deletionCallback={deleteSet} brief />
-													{/each}
-												{/if}
-											</Accordion.Content>
-										</Accordion.Item>
-									</Accordion.Root>
-								{/each}
-							</Accordion.Content>
-						</Accordion.Item>
-					</Accordion.Root>
+					<p><strong>History</strong></p>
+					<div class="flex flex-row">
+						{#each sortedOldInstances as sortedInstance}
+							<Popover.Root portal={null}>
+								<Popover.Trigger asChild let:builder>
+									<Button builders={[builder]} variant="outline" class="w-1/3 mx-0.5"
+										>{new Date(sortedInstance.timestamp).toLocaleDateString('en-GB', {
+											day: '2-digit',
+											month: '2-digit',
+											year: '2-digit'
+										})}</Button
+									>
+								</Popover.Trigger>
+								<Popover.Content class="w-80">
+									{#if sortedInstance.warmup.length > 0}
+										<h4 class="text-l font-bold">Warmup Sets</h4>
+										{#each sortedInstance.warmup as set}
+											<SetComponent {set} deletionCallback={deleteSet} brief />
+										{/each}
+									{/if}
+									{#if sortedInstance.working.length > 0}
+										<h4 class="text-l font-bold mt-2">Working Sets</h4>
+										{#each sortedInstance.working as set}
+											<SetComponent {set} deletionCallback={deleteSet} brief />
+										{/each}
+									{/if}
+								</Popover.Content>
+							</Popover.Root>
+						{/each}
+					</div>
 				{/if}
 			</div>
 			<div class="mt-4">

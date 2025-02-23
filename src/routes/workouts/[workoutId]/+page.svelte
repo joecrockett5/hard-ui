@@ -11,6 +11,7 @@
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { fetchAuthSession } from '@aws-amplify/auth';
 	import { goto } from '$app/navigation';
+	import { getLocalTimeZone } from '@internationalized/date';
 
 	export let data;
 
@@ -103,7 +104,14 @@
 			goto(`/workouts?date=${workout.workoutDate}`);
 		}
 	}
+
+	const asDate = new Date(workoutInfo.workoutDate);
+	const shortDate = `${asDate.getDate()}/${asDate.getMonth() < 10 ? '0' : ''}${asDate.getMonth() + 1}/${asDate.getFullYear() - 2000}`;
 </script>
+
+<svelte:head>
+	<title>Hard: {workoutInfo.title} - {shortDate}</title>
+</svelte:head>
 
 <WorkoutInfoComponent workout={workoutInfo} deletionCallback={deleteWorkout} />
 
