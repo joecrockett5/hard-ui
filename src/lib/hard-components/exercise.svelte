@@ -260,7 +260,7 @@
 		<Card.Content>
 			<div>
 				{#if oldInstances}
-					<p><strong>History</strong></p>
+					<p><strong>最近</strong></p>
 					<div class="flex flex-row">
 						{#each sortedOldInstances as sortedInstance}
 							<Popover.Root portal={null}>
@@ -275,13 +275,13 @@
 								</Popover.Trigger>
 								<Popover.Content class="w-80">
 									{#if sortedInstance.warmup.length > 0}
-										<h4 class="text-l font-bold">Warmup Sets</h4>
+										<h4 class="text-l font-bold">準備に始めるセット</h4>
 										{#each sortedInstance.warmup as set}
 											<SetComponent {set} deletionCallback={deleteSet} brief />
 										{/each}
 									{/if}
 									{#if sortedInstance.working.length > 0}
-										<h4 class="text-l font-bold mt-2">Working Sets</h4>
+										<h4 class="text-l font-bold mt-2">ワークセット</h4>
 										{#each sortedInstance.working as set}
 											<SetComponent {set} deletionCallback={deleteSet} brief />
 										{/each}
