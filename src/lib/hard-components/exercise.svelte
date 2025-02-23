@@ -213,7 +213,9 @@
 			return undefined;
 		}
 
-		if (workDone(workingSets.at(setIndex)) > workDone(mostRecentWorkingSets.at(setIndex))) {
+		if (workingSets.at(setIndex).weight > mostRecentWorkingSets.at(setIndex).weight) {
+			return 1;
+		} else if (workDone(workingSets.at(setIndex)) > workDone(mostRecentWorkingSets.at(setIndex))) {
 			return 1;
 		} else if (workDone(workingSets.at(setIndex)) < workDone(mostRecentWorkingSets.at(setIndex))) {
 			return -1;
