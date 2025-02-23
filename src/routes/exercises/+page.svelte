@@ -79,6 +79,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>Hard: Exercises</title>
+</svelte:head>
+
 <Card.Root class="mt-4">
 	<Card.Header>
 		<Card.Title>Exercises</Card.Title>

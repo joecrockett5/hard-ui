@@ -5,6 +5,10 @@
 
 <img src="/hard-logo.png" alt="Hard Logo" class="h-64 w-64 mx-auto rounded-xl mt-12 mb-4" />
 
+<svelte:head>
+	<title>Hard: Home</title>
+</svelte:head>
+
 {#await getCurrentUser() then user}
 	<p class="mt-4 text-center">Current User: {user.userId}</p>
 {/await}

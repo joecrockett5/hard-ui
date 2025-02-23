@@ -41,6 +41,39 @@
 			workout.notes = updatedNotes;
 		}
 	}
+
+	const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+	const months = [
+		'January',
+		'February',
+		'March',
+		'April',
+		'May',
+		'June',
+		'July',
+		'August',
+		'September',
+		'October',
+		'November',
+		'December'
+	];
+
+	const nthNumber = (number: number) => {
+		if (number > 3 && number < 21) return 'th';
+		switch (number % 10) {
+			case 1:
+				return 'st';
+			case 2:
+				return 'nd';
+			case 3:
+				return 'rd';
+			default:
+				return 'th';
+		}
+	};
+
+	const asDate = new Date(workout.workoutDate);
+	const longDate = `${weekdays[asDate.getDay()]}, ${asDate.getDate()}${nthNumber(asDate.getDate())} ${months[asDate.getMonth()]}`;
 </script>
 
 <Card.Root class="mt-4">
@@ -80,7 +113,7 @@
 		<Card.Title>
 			<a {href}>{workout.title}</a>
 		</Card.Title>
-		<Card.Description>Workout on {workout.workoutDate}</Card.Description>
+		<Card.Description>Workout on {longDate}</Card.Description>
 	</Card.Header>
 	<Card.Content>
 		<div class="grid grid-cols-2 gap-4">
