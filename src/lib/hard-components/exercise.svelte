@@ -48,13 +48,13 @@
 	const creatingWorkingSet = writable(false);
 
 	async function createWarmupSet() {
+		creatingWarmupSet.set(true);
 		const session = await fetchAuthSession();
 		const response = await fetch(
 			`/api/exercise-joins?token=${session.tokens?.idToken?.toString()}&workout=${workoutId}&exercise=${exercise.objectId}`
 		);
 		const joinJson = await response.json();
 		const join = joinJson[0];
-		creatingWarmupSet.set(true);
 		const createSetResponse = await fetch(
 			`/api/sets?token=${session.tokens?.idToken?.toString()}`,
 			{
@@ -87,13 +87,13 @@
 	}
 
 	async function createWorkingSet() {
+		creatingWorkingSet.set(true);
 		const session = await fetchAuthSession();
 		const response = await fetch(
 			`/api/exercise-joins?token=${session.tokens?.idToken?.toString()}&workout=${workoutId}&exercise=${exercise.objectId}`
 		);
 		const joinJson = await response.json();
 		const join = joinJson[0];
-		creatingWorkingSet.set(true);
 		const createSetResponse = await fetch(
 			`/api/sets?token=${session.tokens?.idToken?.toString()}`,
 			{
@@ -189,7 +189,7 @@
 		}
 
 		if (sortedInstances && sortedInstances.at(-1).working.length > 0 && workingSets.length === 0) {
-			workingSetWeight = sortedInstances.at(-1).working[0].weight;
+			workingSetWeight = Math.max(...sortedInstances.at(-1).working.map((set) => set.weight));
 		}
 
 		return sortedInstances;
