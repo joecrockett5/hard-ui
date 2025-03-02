@@ -34,6 +34,21 @@ export const load = (async ({ fetch, cookies, params }) => {
 		exercise.sets = sets;
 	}
 
+	exercises.sort((a, b) => {
+		const aHasSets = a.sets.length > 0;
+		const bHasSets = b.sets.length > 0;
+
+		// Objects with at least one set come first
+		if (aHasSets && !bHasSets) return -1;
+		if (!aHasSets && bHasSets) return 1;
+		if (!aHasSets && !bHasSets) return 0;
+
+		// Both have sets; compare the date on the 0th element.
+		const dateA = new Date(a.sets[0].timestamp).getTime();
+		const dateB = new Date(b.sets[0].timestamp).getTime();
+		return dateA - dateB;
+	});
+
 	return {
 		workoutInfo,
 		exercises,
