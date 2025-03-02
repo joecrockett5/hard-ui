@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import * as Accordion from '$lib/components/ui/accordion';
 	import { goto } from '$app/navigation';
 	import * as Card from '$lib/components/ui/card';
 	import SetComponent from '$lib/hard-components/set.svelte';
@@ -208,17 +207,19 @@
 		return set.weight * set.reps;
 	}
 
-	function setComparison(setIndex: number) {
-		const mostRecentWorkingSets = sortedOldInstances.at(-1).working;
-		if (!mostRecentWorkingSets.at(setIndex)) {
-			return undefined;
-		}
+	// $: {
+	// 	const applicableOldSets = sortedOldInstances.filter(
+	// 		(item) => item.timestamp.getTime() >= new Date(exercise.timestamp).getTime()
+	// 	);
+	// 	const mostRecentWorkingSets = applicableOldSets.at(-1).working;
+	// }
 
-		if (workingSets.at(setIndex).weight > mostRecentWorkingSets.at(setIndex).weight) {
+	function setComparison(newSet: Set, oldSet: Set) {
+		if (newSet.weight > oldSet.weight) {
 			return 1;
-		} else if (workDone(workingSets.at(setIndex)) > workDone(mostRecentWorkingSets.at(setIndex))) {
+		} else if (workDone(newSet) > workDone(oldSet)) {
 			return 1;
-		} else if (workDone(workingSets.at(setIndex)) < workDone(mostRecentWorkingSets.at(setIndex))) {
+		} else if (workDone(newSet) < workDone(oldSet)) {
 			return -1;
 		} else {
 			return 0;
@@ -262,7 +263,7 @@
 				{#if oldInstances}
 					<p><strong>History</strong></p>
 					<div class="flex flex-row">
-						{#each sortedOldInstances as sortedInstance}
+						{#each sortedOldInstances as sortedInstance, workoutIndex}
 							<Popover.Root portal={null}>
 								<Popover.Trigger asChild let:builder>
 									<Button builders={[builder]} variant="outline" class="w-1/3 mx-0.5"
@@ -282,8 +283,20 @@
 									{/if}
 									{#if sortedInstance.working.length > 0}
 										<h4 class="text-l font-bold mt-2">Working Sets</h4>
-										{#each sortedInstance.working as set}
-											<SetComponent {set} deletionCallback={deleteSet} brief />
+										{#each sortedInstance.working as set, setIndex}
+											{#if sortedOldInstances.at(workoutIndex - 1)}
+												<SetComponent
+													{set}
+													deletionCallback={deleteSet}
+													brief
+													display={setComparison(
+														set,
+														sortedOldInstances.at(workoutIndex - 1).working.at(setIndex)
+													)}
+												/>
+											{:else}
+												<SetComponent {set} deletionCallback={deleteSet} brief />
+											{/if}
 										{/each}
 									{/if}
 								</Popover.Content>
@@ -316,7 +329,11 @@
 			<div class="mt-6">
 				<h3 class="text-xl font-bold">Working Sets</h3>
 				{#each workingSets as set, setIndex}
-					<SetComponent {set} deletionCallback={deleteSet} display={setComparison(setIndex)} />
+					<SetComponent
+						{set}
+						deletionCallback={deleteSet}
+						display={setComparison(set, sortedOldInstances.at(-1).working.at(setIndex))}
+					/>
 				{/each}
 				{#if $creatingWorkingSet}
 					<Skeleton class="h-14 w-full mt-2" />
